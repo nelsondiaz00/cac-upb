@@ -1,0 +1,111 @@
+import AppointmentModel from '../model/AppointmentModel';
+import { Request, Response } from 'express';
+import NullAppointment from '../types/NullAppointment';
+import Client from '../../client-component/types/Client';
+import Appointment from '../types/Appointment';
+import NullPerson from '../../shared/NullPerson';
+
+export default class AppointmentController {
+  constructor(private readonly appointmentModel: AppointmentModel) {}
+
+  public getAppointmentById = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
+    const { id } = req.params;
+    if (id) {
+      const appointment = await this.appointmentModel.getAppointmentById(id);
+      res.json(appointment);
+    } else {
+      res.json(NullAppointment);
+    }
+  };
+
+  public getAppointments = async (
+    _req: Request,
+    res: Response
+  ): Promise<void> => {
+    const appointments = await this.appointmentModel.getAppointments();
+    res.json(appointments);
+  };
+
+  public updateAppointment = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
+    const appointmentData = req.body;
+
+    // const client = new Client(
+    //   appointmentData.client.identification.toString(),
+    //   '',
+    //   '',
+    //   new Date(''),
+    //   ''
+    // );
+
+    const appointment = new Appointment(
+      appointmentData.id.toString(),
+      new NullPerson(),
+      appointmentData.type,
+      new Date(appointmentData.date),
+      appointmentData.address
+    );
+
+    try {
+      await this.appointmentModel.updateAppointment(appointment);
+      res.json({ message: 'Appointment updated' });
+    } catch (error) {
+      console.error('Error al actualizar la cita:', error);
+      res.status(500).json({ error: 'No se pudo actualizar la cita' });
+    }
+  };
+
+  public createAppointment = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
+    const appointmentData = req.body;
+
+    const client = new Client(
+      appointmentData.client.identification.toString(),
+      appointmentData.client.name,
+      appointmentData.client.lastname,
+      new Date(appointmentData.client.birthday),
+      appointmentData.client.address
+    );
+
+    const appointment = new Appointment(
+      ' ',
+      client,
+      appointmentData.type,
+      new Date(appointmentData.date),
+      appointmentData.address
+    );
+
+    try {
+      await this.appointmentModel.createAppointment(appointment);
+      res.json({ message: 'Appointment added' });
+    } catch (error) {
+      console.error('Error al agregar la cita:', error);
+      res.status(500).json({ error: 'No se pudo agregar la cita' });
+    }
+  };
+
+  public deleteAppointment = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
+    const { id } = req.params;
+    try {
+      if (id) {
+        await this.appointmentModel.deleteAppointment(id);
+        res.json({ message: 'Appointment deleted' });
+      } else {
+        res.status(400).json({ error: 'ID vacío' });
+      }
+    } catch (error) {
+      console.error('Error al eliminar la cita:', error);
+      res.status(500).json({ error: 'No se pudo eliminar la cita' });
+    }
+  };
+}

@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import NullAppointment from '../types/NullAppointment';
 import Client from '../../client-component/types/Client';
 import Appointment from '../types/Appointment';
-import NullPerson from '../../shared/NullPerson';
+// import NullPerson from '../../shared/NullPerson';
 
 export default class AppointmentController {
   constructor(private readonly appointmentModel: AppointmentModel) {}
@@ -29,23 +29,31 @@ export default class AppointmentController {
     res.json(appointments);
   };
 
+  public getAppointmentsDeleted = async (
+    _req: Request,
+    res: Response
+  ): Promise<void> => {
+    const appointments = await this.appointmentModel.getAppointmentsDeleted();
+    res.json(appointments);
+  };
+
   public updateAppointment = async (
     req: Request,
     res: Response
   ): Promise<void> => {
     const appointmentData = req.body;
 
-    // const client = new Client(
-    //   appointmentData.client.identification.toString(),
-    //   '',
-    //   '',
-    //   new Date(''),
-    //   ''
-    // );
+    const client = new Client(
+      appointmentData.client_identification.toString(),
+      '',
+      '',
+      new Date(''),
+      ''
+    );
 
     const appointment = new Appointment(
       appointmentData.id.toString(),
-      new NullPerson(),
+      client,
       appointmentData.type,
       new Date(appointmentData.date),
       appointmentData.address
@@ -55,7 +63,7 @@ export default class AppointmentController {
       await this.appointmentModel.updateAppointment(appointment);
       res.json({ message: 'Appointment updated' });
     } catch (error) {
-      console.error('Error al actualizar la cita:', error);
+      // console.error('Error al actualizar la cita:', error);
       res.status(500).json({ error: 'No se pudo actualizar la cita' });
     }
   };
@@ -86,7 +94,7 @@ export default class AppointmentController {
       await this.appointmentModel.createAppointment(appointment);
       res.json({ message: 'Appointment added' });
     } catch (error) {
-      console.error('Error al agregar la cita:', error);
+      // console.error('Error al agregar la cita:', error);
       res.status(500).json({ error: 'No se pudo agregar la cita' });
     }
   };

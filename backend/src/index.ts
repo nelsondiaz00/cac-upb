@@ -1,5 +1,6 @@
 import Appointment from './appointment/Appointment';
-import Client from './client/Client';
+import Client from './client-component/Client';
+import Employee from './employee/Employee';
 import Server from './express/Server';
 import Ticket from './ticket/Ticket';
 
@@ -9,5 +10,12 @@ const clientView = Client.createView();
 
 const ticketView = Ticket.createView();
 
-const server = new Server(clientView, appointmentView, ticketView);
+const employeeView = Employee.createView();
+
+const server = new Server(
+  appointmentView,
+  ticketView,
+  employeeView,
+  clientView
+);
 server.start();

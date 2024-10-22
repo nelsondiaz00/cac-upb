@@ -73,7 +73,7 @@ export default class TicketModel {
     return new NullTicket();
   }
 
-  public async getTicket(): Promise<Ticket[]> {
+  public async getTickets(): Promise<Ticket[]> {
     const [ticketRows]: any = await this.connection.execute(
       'SELECT * FROM Ticket'
     );
@@ -119,6 +119,13 @@ export default class TicketModel {
     );
     if (appointmentRows.length > 0) {
       const appointmentRow = appointmentRows[0];
+      const appointmentDate = new Date(appointmentRow.date);
+      const currentDate = new Date();
+
+      if (currentDate > appointmentDate) {
+        console.log("Can't create ticket for past appointments");
+        return new NullTicket();
+      }
       const [clientRows]: any = await this.connection.execute(
         'SELECT * FROM Client WHERE id = ?',
         [appointmentRow.client_id]
@@ -140,13 +147,11 @@ export default class TicketModel {
           appointmentRow.address
         );
 
-        // Verificar si ya existe un ticket con el mismo appointment_id
         const [existingTicketRows]: any = await this.connection.execute(
           'SELECT * FROM Ticket WHERE appointment_id = ?',
           [appointmentRow.id]
         );
         if (existingTicketRows.length > 0) {
-          // Ya existe un ticket con este appointment_id, no crear un nuevo ticket
           return new NullTicket();
         }
 

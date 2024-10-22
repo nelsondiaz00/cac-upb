@@ -1,17 +1,19 @@
 import cors from 'cors';
 import express, { Application } from 'express';
-import ClientView from '../client/view/ClientView';
 import path from 'path';
 import AppointmentView from '../appointment/view/AppointmentView';
 import TicketView from '../ticket/view/TicketView';
+import EmployeeView from '../employee/view/EmployeeView';
+import ClientView from '../client-component/view/ClientView';
 
 export default class Server {
   private readonly app: Application;
 
   constructor(
-    private readonly clientView: ClientView,
     private readonly appointmentView: AppointmentView,
-    private readonly ticketView: TicketView
+    private readonly ticketView: TicketView,
+    private readonly employeeView: EmployeeView,
+    private readonly clientView: ClientView
   ) {
     this.app = express();
     this.statics();
@@ -32,8 +34,10 @@ export default class Server {
   public routes = (): void => {
     this.app.use('/api/v1.0/cac', cors(), this.appointmentView.router);
     this.app.use('/api/v1.0/cac', cors(), this.ticketView.router);
-    this.app.use('/', cors(), this.clientView.router);
-    this.app.use('*', cors(), this.clientView.router);
+    this.app.use('/api/v1.0/cac', cors(), this.employeeView.router);
+    this.app.use('/api/v1.0/cac', cors(), this.clientView.router);
+    // this.app.use('/', cors(), this.clientView.router);
+    // this.app.use('*', cors(), this.clientView.router);
   };
 
   public start = (): void => {

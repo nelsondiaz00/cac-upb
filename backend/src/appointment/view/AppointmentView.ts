@@ -24,6 +24,13 @@ export default class AppointmentView {
       )
     );
 
+    this.router.get(
+      '/appointmentDeleted',
+      this.appointmentController.getAppointmentsDeleted.bind(
+        this.appointmentController
+      )
+    );
+
     this.router.patch(
       '/appointment/update',
       this.appointmentController.updateAppointment.bind(

@@ -15,8 +15,8 @@ export default class TicketController {
     }
   };
 
-  public getTicket = async (_req: Request, res: Response): Promise<void> => {
-    const ticket = await this.ticketModel.getTicket();
+  public getTickets = async (_req: Request, res: Response): Promise<void> => {
+    const ticket = await this.ticketModel.getTickets();
     res.json(ticket);
   };
 

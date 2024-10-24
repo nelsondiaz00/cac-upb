@@ -11,6 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^5.3.3",
     "typescript": "^5.6.3"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "^5.2.10"
   }
 }

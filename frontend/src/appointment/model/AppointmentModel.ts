@@ -3,9 +3,9 @@ import Environment from '../../shared/Environment.js';
 import NullPerson from '../../shared/NullPerson.js';
 import Appointment from '../types/Appointment.js';
 import Subject from '../types/Subject.js';
-import AppointmentView from '../view/AppointmentView.js';
+import CreateAppointmentView from '../view/AppointmentView.js';
 
-export default class AppointmentModel extends Subject<AppointmentView> {
+export default class CreateAppointmentModel extends Subject<CreateAppointmentView> {
   constructor() {
     super();
   }

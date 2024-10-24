@@ -2,7 +2,7 @@ import Client from '../../client/types/Client.js';
 import Environment from '../../shared/Environment.js';
 import NullPerson from '../../shared/NullPerson.js';
 import Subject from '../types/Subject.js';
-export default class AppointmentModel extends Subject {
+export default class CreateAppointmentModel extends Subject {
     constructor() {
         super();
     }

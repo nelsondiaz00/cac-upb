@@ -1,11 +1,11 @@
-import AppointmentModel from '../model/AppointmentModel.js';
-import AppointmentView from '../view/AppointmentView.js';
+import CreateAppointmentModel from '../model/AppointmentModel.js';
+import CreateAppointmentView from '../view/AppointmentView.js';
 
-export default class AppointmentController {
-  private model: AppointmentModel;
-  private view: AppointmentView;
+export default class CreateAppointmentController {
+  private model: CreateAppointmentModel;
+  private view: CreateAppointmentView;
 
-  constructor(model: AppointmentModel, view: AppointmentView) {
+  constructor(model: CreateAppointmentModel, view: CreateAppointmentView) {
     this.model = model;
     this.view = view;
   }

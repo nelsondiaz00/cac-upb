@@ -1,4 +1,4 @@
-export default class AppointmentController {
+export default class CreateAppointmentController {
     model;
     view;
     constructor(model, view) {

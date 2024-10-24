@@ -1,15 +1,15 @@
-import AppointmentModel from '../model/AppointmentModel.js';
+import CreateAppointmentModel from '../model/AppointmentModel.js';
 import AppointmentTemplate from '../template/AppointmentTemplate.js';
 import AppointmentTemplateModal from '../template/AppointmentTemplateModal.js';
 import Appointment from '../types/Appointment.js';
 import Observer from '../types/Observer.js';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default class AppointmentView extends Observer<AppointmentModel> {
+export default class CreateAppointmentView extends Observer<CreateAppointmentModel> {
   private selector: HTMLDivElement;
   private selectorName = 'appointment';
 
-  constructor(subject: AppointmentModel) {
+  constructor(subject: CreateAppointmentModel) {
     super(subject);
     this.selector = document.createElement('div');
   }
@@ -55,7 +55,7 @@ export default class AppointmentView extends Observer<AppointmentModel> {
     submitIdentification.addEventListener('click', async () => {
       const form_user = document.querySelector('#form_user') as HTMLFormElement;
       const client = await (
-        this.subject as AppointmentModel
+        this.subject as CreateAppointmentModel
       ).getUserByIdentification(identificationUser.value);
       const newFormContent = await AppointmentTemplate.renderClient(client);
 
@@ -88,7 +88,7 @@ export default class AppointmentView extends Observer<AppointmentModel> {
       ) as HTMLSelectElement;
 
       const client = await (
-        this.subject as AppointmentModel
+        this.subject as CreateAppointmentModel
       ).getUserByIdentification(identificationUser.value);
 
       if (!client) {
@@ -110,7 +110,7 @@ export default class AppointmentView extends Observer<AppointmentModel> {
       );
 
       const response = await (
-        this.subject as AppointmentModel
+        this.subject as CreateAppointmentModel
       ).createAppointment(newAppointment);
 
       if (response) {

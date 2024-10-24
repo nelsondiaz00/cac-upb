@@ -3,7 +3,7 @@ import AppointmentTemplateModal from '../template/AppointmentTemplateModal.js';
 import Appointment from '../types/Appointment.js';
 import Observer from '../types/Observer.js';
 // import 'bootstrap/dist/css/bootstrap.min.css';
-export default class AppointmentView extends Observer {
+export default class CreateAppointmentView extends Observer {
     selector;
     selectorName = 'appointment';
     constructor(subject) {

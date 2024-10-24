@@ -1,12 +1,12 @@
-import AppointmentController from './controller/AppointmentController.js';
-import AppointmentModel from './model/AppointmentModel.js';
-import AppointmentView from './view/AppointmentView.js';
+import CreateAppointmentController from './controller/AppointmentController.js';
+import CreateAppointmentModel from './model/AppointmentModel.js';
+import CreateAppointmentView from './view/AppointmentView.js';
 
 export default class Appointment {
-  public static create(): AppointmentController {
-    const model = new AppointmentModel();
-    const view = new AppointmentView(model);
-    const controller = new AppointmentController(model, view);
+  public static create(): CreateAppointmentController {
+    const model = new CreateAppointmentModel();
+    const view = new CreateAppointmentView(model);
+    const controller = new CreateAppointmentController(model, view);
     return controller;
   }
 }

@@ -43,29 +43,42 @@ export default class AppointmentController {
   ): Promise<void> => {
     const appointmentData = req.body;
 
-    const client = new Client(
-      appointmentData.client_identification.toString(),
-      '',
-      '',
-      new Date(''),
-      ''
-    );
+    console.log(appointmentData);
 
-    const appointment = new Appointment(
-      appointmentData.id.toString(),
-      client,
-      appointmentData.type,
-      new Date(appointmentData.date),
-      appointmentData.address,
-      appointmentData.description
-    );
+    if (
+      !appointmentData.client_identification ||
+      !appointmentData.id ||
+      !appointmentData.type ||
+      !appointmentData.date ||
+      !appointmentData.address ||
+      !appointmentData.description
+    ) {
+      res.status(400).json({ error: 'Datos incompletos para la cita' });
+    } else {
+      const client = new Client(
+        appointmentData.client_identification.toString(),
+        '',
+        '',
+        new Date(''),
+        ''
+      );
 
-    try {
-      await this.appointmentModel.updateAppointment(appointment);
-      res.json({ message: 'Appointment updated' });
-    } catch (error) {
-      // console.error('Error al actualizar la cita:', error);
-      res.status(500).json({ error: 'No se pudo actualizar la cita' });
+      const appointment = new Appointment(
+        appointmentData.id.toString(),
+        client,
+        appointmentData.type,
+        new Date(appointmentData.date),
+        appointmentData.address,
+        appointmentData.description
+      );
+
+      try {
+        await this.appointmentModel.updateAppointment(appointment);
+        res.status(200).json({ message: 'Appointment updated' });
+      } catch (error) {
+        // console.error('Error al actualizar la cita:', error);
+        res.status(500).json({ error: 'No se pudo actualizar la cita' });
+      }
     }
   };
 
@@ -73,31 +86,44 @@ export default class AppointmentController {
     req: Request,
     res: Response
   ): Promise<void> => {
-    const appointmentData = req.body;
+    const appointmentDataComplete = req.body;
+    const appointmentData = appointmentDataComplete.appointment;
+    if (
+      !appointmentData.client ||
+      !appointmentData.client.identification ||
+      !appointmentData.type ||
+      !appointmentData.date ||
+      !appointmentData.address ||
+      !appointmentData.description
+    ) {
+      res.status(400).json({ error: 'Datos incompletos para la cita' });
+      // console.log(appointmentData);
+    } else {
+      // console.log(appointmentData.appointment);
+      const client = new Client(
+        appointmentData.client.identification.toString(),
+        '',
+        '',
+        new Date(),
+        ''
+      );
 
-    const client = new Client(
-      appointmentData.client.identification.toString(),
-      appointmentData.client.name,
-      appointmentData.client.lastname,
-      new Date(appointmentData.client.birthday),
-      appointmentData.client.address
-    );
+      const appointment = new Appointment(
+        '',
+        client,
+        appointmentData.type,
+        new Date(appointmentData.date),
+        appointmentData.address,
+        appointmentData.description
+      );
 
-    const appointment = new Appointment(
-      ' ',
-      client,
-      appointmentData.type,
-      new Date(appointmentData.date),
-      appointmentData.address,
-      appointmentData.description
-    );
-
-    try {
-      await this.appointmentModel.createAppointment(appointment);
-      res.json({ message: 'Appointment added' });
-    } catch (error) {
-      // console.error('Error al agregar la cita:', error);
-      res.status(500).json({ error: 'No se pudo agregar la cita' });
+      try {
+        await this.appointmentModel.createAppointment(appointment);
+        res.status(201).json({ message: 'Appointment added' });
+      } catch (error) {
+        // console.error('Error al agregar la cita:', error);
+        res.status(500).json({ error: 'No se pudo agregar la cita' });
+      }
     }
   };
 

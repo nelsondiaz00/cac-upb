@@ -1,0 +1,20 @@
+{
+  "name": "i008-movies-mvc-obs",
+  "version": "1.0.0",
+  "description": "## Reference",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "typescript": "^5.6.3"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "^5.2.10"
+  }
+}

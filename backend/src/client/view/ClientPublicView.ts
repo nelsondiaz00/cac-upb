@@ -15,6 +15,11 @@ export default class ClientPublicView {
       this.clientController.index.bind(this.clientController)
     );
 
+    this.router.get(
+      '/:module',
+      this.clientController.index.bind(this.clientController)
+    );
+
     // this.router.get(
     //   '*',
     //   this.clientController.not_found.bind(this.clientController)

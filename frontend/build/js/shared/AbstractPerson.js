@@ -24,7 +24,10 @@ export default class AbstractPerson {
         return this.lastname;
     }
     getBirthday() {
-        return this.birthday;
+        if (this.birthday instanceof Date) {
+            return this.birthday;
+        }
+        return new Date(this.birthday);
     }
     getAddress() {
         return this.address;

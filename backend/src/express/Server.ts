@@ -5,6 +5,7 @@ import AppointmentView from '../appointment/view/AppointmentView';
 import TicketView from '../ticket/view/TicketView';
 import EmployeeView from '../employee/view/EmployeeView';
 import ClientView from '../client-component/view/ClientView';
+import ClientPublicView from '../client/view/ClientPublicView';
 
 export default class Server {
   private readonly app: Application;
@@ -13,7 +14,8 @@ export default class Server {
     private readonly appointmentView: AppointmentView,
     private readonly ticketView: TicketView,
     private readonly employeeView: EmployeeView,
-    private readonly clientView: ClientView
+    private readonly clientView: ClientView,
+    private readonly clientPublicView: ClientPublicView
   ) {
     this.app = express();
     this.statics();
@@ -36,8 +38,8 @@ export default class Server {
     this.app.use('/api/v1.0/cac', cors(), this.ticketView.router);
     this.app.use('/api/v1.0/cac', cors(), this.employeeView.router);
     this.app.use('/api/v1.0/cac', cors(), this.clientView.router);
-    // this.app.use('/', cors(), this.clientView.router);
-    // this.app.use('*', cors(), this.clientView.router);
+    this.app.use('/', cors(), this.clientPublicView.router);
+    this.app.use('*', cors(), this.clientPublicView.router);
   };
 
   public start = (): void => {

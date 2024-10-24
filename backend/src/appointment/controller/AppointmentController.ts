@@ -56,7 +56,8 @@ export default class AppointmentController {
       client,
       appointmentData.type,
       new Date(appointmentData.date),
-      appointmentData.address
+      appointmentData.address,
+      appointmentData.description
     );
 
     try {
@@ -87,7 +88,8 @@ export default class AppointmentController {
       client,
       appointmentData.type,
       new Date(appointmentData.date),
-      appointmentData.address
+      appointmentData.address,
+      appointmentData.description
     );
 
     try {

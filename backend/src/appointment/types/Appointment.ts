@@ -6,19 +6,22 @@ export default class Appointment {
   private type: string;
   private date: Date;
   private address: string;
+  private description: string;
 
   constructor(
     id: string,
     client: Client,
     type: string,
     date: Date,
-    address: string
+    address: string,
+    description: string
   ) {
     this.id = id;
     this.client = client;
     this.type = type;
     this.date = date;
     this.address = address;
+    this.description = description;
   }
 
   public getId(): string {
@@ -65,11 +68,19 @@ export default class Appointment {
     return this.date > actualDate;
   }
 
-  public save(): void {}
+  public getDescription(): string {
+    return this.description;
+  }
 
-  public update(): void {}
+  public setDescription(description: string): void {
+    this.description = description;
+  }
 
-  public cancel(): void {}
+  // public save(): void {}
+
+  // public update(): void {}
+
+  // public cancel(): void {}
 
   public isNull(): boolean {
     return false;

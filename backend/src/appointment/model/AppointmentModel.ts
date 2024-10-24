@@ -52,7 +52,8 @@ export default class AppointmentModel {
           client,
           appointmentRow.type,
           new Date(appointmentRow.date),
-          appointmentRow.address
+          appointmentRow.address,
+          appointmentRow.description
         );
 
         return appointment;
@@ -91,7 +92,8 @@ export default class AppointmentModel {
           client,
           appointmentRow.type,
           new Date(appointmentRow.date),
-          appointmentRow.address
+          appointmentRow.address,
+          appointmentRow.description
         );
 
         appointments.push(appointment);
@@ -129,7 +131,8 @@ export default class AppointmentModel {
           client,
           appointmentRow.type,
           new Date(appointmentRow.date),
-          appointmentRow.address
+          appointmentRow.address,
+          appointmentRow.description
         );
 
         appointments.push(appointment);
@@ -181,8 +184,8 @@ export default class AppointmentModel {
     `;
 
     const queryInsertAppointment = `
-      INSERT INTO Appointment (client_id, type, date, address)
-      VALUES (?, ?, ?, ?);
+      INSERT INTO Appointment (client_id, type, date, address, description)
+      VALUES (?, ?, ?, ?, ?);
     `;
 
     const [rows]: any = await this.connection.execute(queryClientId, [
@@ -200,6 +203,7 @@ export default class AppointmentModel {
       appointment.getType(),
       appointment.getDate(),
       appointment.getAddress(),
+      appointment.getDescription(),
     ]);
   };
 

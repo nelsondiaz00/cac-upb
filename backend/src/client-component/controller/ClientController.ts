@@ -8,8 +8,8 @@ export default class ClientController {
   public getClientById = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     if (id) {
-      const ticket = await this.clientModel.getClientById(id);
-      res.json(ticket);
+      const client = await this.clientModel.getClientById(id);
+      res.json(client);
     } else {
       res.json(NullPerson);
     }

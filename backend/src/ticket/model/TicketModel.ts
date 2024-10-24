@@ -60,7 +60,8 @@ export default class TicketModel {
             client,
             appointmentRow.type,
             new Date(appointmentRow.date),
-            appointmentRow.address
+            appointmentRow.address,
+            appointmentRow.description
           );
           return new Ticket(ticketRow.turn, appointment);
         }
@@ -103,7 +104,8 @@ export default class TicketModel {
             client,
             appointmentRow.type,
             new Date(appointmentRow.date),
-            appointmentRow.address
+            appointmentRow.address,
+            appointmentRow.description
           );
           tickets.push(new Ticket(ticketRow.turn, appointment));
         }
@@ -144,7 +146,8 @@ export default class TicketModel {
           client,
           appointmentRow.type,
           new Date(appointmentRow.date),
-          appointmentRow.address
+          appointmentRow.address,
+          appointmentRow.description
         );
 
         const [existingTicketRows]: any = await this.connection.execute(

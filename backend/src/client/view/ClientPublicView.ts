@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import ClientController from '../controller/ClientController';
+import ClientController from '../controller/ClientPublicController';
 
-export default class ClientView {
+export default class ClientPublicView {
   router: Router;
 
   constructor(private readonly clientController: ClientController) {
@@ -15,9 +15,9 @@ export default class ClientView {
       this.clientController.index.bind(this.clientController)
     );
 
-    this.router.get(
-      '*',
-      this.clientController.not_found.bind(this.clientController)
-    );
+    // this.router.get(
+    //   '*',
+    //   this.clientController.not_found.bind(this.clientController)
+    // );
   };
 }

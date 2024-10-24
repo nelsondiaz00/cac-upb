@@ -40,7 +40,21 @@ export default class CreateAppointmentView extends Observer {
         submitIdentification.addEventListener('click', async () => {
             const form_user = document.querySelector('#form_user');
             const client = await this.subject.getUserByIdentification(identificationUser.value);
+            if (!client.getIdentification()) {
+                const toastHTML = await AppointmentTemplateModal.renderError('Error al cargar datos');
+                this.showToast(toastHTML);
+                return;
+            }
             const newFormContent = await CreateAppointmentTemplate.renderClient(client);
+            console.log(client);
+            if (client.isNull()) {
+                const toastHTML = await AppointmentTemplateModal.renderError('Cliente no encontrado');
+                this.showToast(toastHTML);
+            }
+            else {
+                const toastHTML = await AppointmentTemplateModal.renderSuccessful('Cliente cargado exitosamente');
+                this.showToast(toastHTML);
+            }
             if (form_user) {
                 form_user.innerHTML = newFormContent;
             }
@@ -63,7 +77,7 @@ export default class CreateAppointmentView extends Observer {
             const newAppointment = new Appointment('0', client, appointmentType.value, combinedDateTime, appointmentAddress.value, appointmentDescription.value);
             const response = await this.subject.createAppointment(newAppointment);
             if (response) {
-                const toastHTML = await AppointmentTemplateModal.renderAppointmentCreated();
+                const toastHTML = await AppointmentTemplateModal.renderSuccessful('Cita creada exitosamente');
                 this.showToast(toastHTML);
                 appointmentType.value = '';
                 appointmentDescription.value = '';
@@ -84,7 +98,7 @@ export default class CreateAppointmentView extends Observer {
                 userBirthday.value = '';
             }
             else {
-                const toastHTML = await AppointmentTemplateModal.renderAppointmentError();
+                const toastHTML = await AppointmentTemplateModal.renderError('Cita fallida');
                 this.showToast(toastHTML);
             }
         });

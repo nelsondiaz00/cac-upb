@@ -15,9 +15,15 @@ export default class CreateAppointmentModel extends Subject {
         if (response.status !== 200) {
             return new NullPerson();
         }
-        const responseData = await response.json();
-        const client = new Client(responseData.identification, responseData.name, responseData.lastname, responseData.birthday, responseData.address);
-        return client;
+        try {
+            const responseData = await response.json();
+            const client = new Client(responseData.identification, responseData.name, responseData.lastname, responseData.birthday, responseData.address);
+            return client;
+        }
+        catch (e) {
+            console.log('acá');
+            return new NullPerson();
+        }
     };
     createAppointment = async (appointment) => {
         console.log(appointment);

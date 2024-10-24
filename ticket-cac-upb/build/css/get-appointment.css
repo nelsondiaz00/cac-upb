@@ -1,0 +1,47 @@
+.main-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.container-component {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+header {
+  width: 100%;
+  padding: 1.5% 0 3% 3%;
+}
+
+.circle-red {
+  width: 15px;
+  height: 15px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.circle-green {
+  width: 15px;
+  height: 15px;
+  background-color: green;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+input[readonly] {
+  color: gray;
+}
+
+.update-main-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.components-container {
+  display: flex;
+  flex-direction: row;
+}

@@ -37,10 +37,12 @@ export default class UpdateAppointmentView extends Observer<UpdateAppointmentMod
   public addListeners(): void {
     window.addEventListener('DOMContentLoaded', () => {
       this.addSubmitListeners();
+      this.addAppointmentListener();
+      console.log('addSubmitListeners');
     });
   }
 
-  public addSubmitListeners(): void {
+  public addAppointmentListener(): void {
     const idAppointment = document.querySelector(
       '#appointment_id'
     ) as HTMLInputElement;
@@ -55,7 +57,21 @@ export default class UpdateAppointmentView extends Observer<UpdateAppointmentMod
       const appointment = await (
         this.subject as UpdateAppointmentModel
       ).getAppointmentById(idAppointment.value);
-      // console.log(info_appointment);
+
+      if (appointment.isNull()) {
+        // console.error('No se encontró la cita');
+        const toastHTML = await AppointmentTemplateModal.renderError(
+          'Cita no encontrada'
+        );
+        this.showToast(toastHTML);
+      } else {
+        const toastHTML = await AppointmentTemplateModal.renderSuccessful(
+          'Cita cargada exitosamente'
+        );
+        this.showToast(toastHTML);
+      }
+
+      console.log(appointment);
 
       const newFormContent = await UpdateAppointmentTemplate.renderAppointment(
         appointment
@@ -65,6 +81,13 @@ export default class UpdateAppointmentView extends Observer<UpdateAppointmentMod
         this.addSubmitListeners();
       }
     });
+  }
+
+  public addSubmitListeners(): void {
+    console.log('demás submits');
+    const idAppointment = document.querySelector(
+      '#appointment_id'
+    ) as HTMLInputElement;
 
     const identificationUser = document.querySelector(
       '#user_identification'
@@ -73,27 +96,50 @@ export default class UpdateAppointmentView extends Observer<UpdateAppointmentMod
     const submitIdentificationUser = document.querySelector(
       '#submit-identification-user'
     ) as HTMLButtonElement;
-    console.log(submitIdentificationUser);
+    //  console.log(submitIdentificationUser);
+
     submitIdentificationUser.addEventListener('click', async () => {
       console.log('click');
       const form_user = document.querySelector('#form_user') as HTMLFormElement;
       const client = await (
         this.subject as UpdateAppointmentModel
       ).getUserByIdentification(identificationUser.value);
+      if (!client.getIdentification()) {
+        const toastHTML = await AppointmentTemplateModal.renderError(
+          'Espacio de identificación vacío'
+        );
+        this.showToast(toastHTML);
+        return;
+      }
       const newFormContent = await UpdateAppointmentTemplate.renderClient(
         client
       );
+
+      console.log(client);
+
+      if (client.isNull()) {
+        // console.error('No se encontró la cita');
+        const toastHTML = await AppointmentTemplateModal.renderError(
+          'Cliente no encontrado'
+        );
+        this.showToast(toastHTML);
+      } else {
+        const toastHTML = await AppointmentTemplateModal.renderSuccessful(
+          'Cliente cargado exitosamente'
+        );
+        this.showToast(toastHTML);
+      }
       console.log(form_user);
       if (form_user) {
         form_user.innerHTML = newFormContent;
-        this.addSubmitListeners();
+        // this.addSubmitListeners();
       }
-      // console.log(client);
     });
 
     const submitAppointment = document.querySelector(
       '#submit-appointment'
     ) as HTMLButtonElement;
+
     submitAppointment.addEventListener('click', async () => {
       // const form_user = document.querySelector('#form_user') as HTMLFormElement;
       const appointmentType = document.querySelector(
@@ -114,8 +160,12 @@ export default class UpdateAppointmentView extends Observer<UpdateAppointmentMod
       const client = await (
         this.subject as UpdateAppointmentModel
       ).getUserByIdentification(identificationUser.value);
-      if (!client) {
+      if (!client.getIdentification()) {
         console.error('No se encontró el cliente');
+        const toastHTML = await AppointmentTemplateModal.renderError(
+          'Error en creación de cita'
+        );
+        this.showToast(toastHTML);
         return;
       }
       const combinedDateTime = new Date(
@@ -133,8 +183,9 @@ export default class UpdateAppointmentView extends Observer<UpdateAppointmentMod
         this.subject as UpdateAppointmentModel
       ).updateAppointment(newAppointment);
       if (response) {
-        const toastHTML =
-          await AppointmentTemplateModal.renderAppointmentCreated();
+        const toastHTML = await AppointmentTemplateModal.renderSuccessful(
+          'Actualización de cita exitosa'
+        );
         this.showToast(toastHTML);
         appointmentType.value = '';
         appointmentDescription.value = '';
@@ -164,8 +215,9 @@ export default class UpdateAppointmentView extends Observer<UpdateAppointmentMod
         userAddress.value = '';
         userBirthday.value = '';
       } else {
-        const toastHTML =
-          await AppointmentTemplateModal.renderAppointmentError();
+        const toastHTML = await AppointmentTemplateModal.renderError(
+          'Actualización de cita fallida'
+        );
         this.showToast(toastHTML);
       }
     });

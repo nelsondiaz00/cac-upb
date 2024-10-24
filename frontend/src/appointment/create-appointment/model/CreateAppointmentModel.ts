@@ -23,15 +23,20 @@ export default class CreateAppointmentModel extends Subject<CreateAppointmentVie
       return new NullPerson();
     }
 
-    const responseData = await response.json();
-    const client = new Client(
-      responseData.identification,
-      responseData.name,
-      responseData.lastname,
-      responseData.birthday,
-      responseData.address
-    );
-    return client;
+    try {
+      const responseData = await response.json();
+      const client = new Client(
+        responseData.identification,
+        responseData.name,
+        responseData.lastname,
+        responseData.birthday,
+        responseData.address
+      );
+      return client;
+    } catch (e) {
+      console.log('acá');
+      return new NullPerson();
+    }
   };
 
   public createAppointment = async (

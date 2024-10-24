@@ -11,6 +11,6 @@ export default class Client extends AbstractPerson {
     super(identification, name, lastname, birthday, address);
   }
   public isNull(): boolean {
-    return this.isNull();
+    return false;
   }
 }

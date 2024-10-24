@@ -1,16 +1,19 @@
-import Appointment from '../../appointment/Appointment.js';
+import CreateAppointment from '../../appointment/create-appointment/CreateAppointment.js';
+import UpdateAppointment from '../../appointment/update-appointment/UpdateAppointment.js';
 // import IndexView from '../view/IndexView.js'
 export default class IndexController {
     indexModel;
     indexView;
     createAppointment;
+    updateAppointment;
     // private readonly movies: MoviesController
     // private readonly error: ErrorController
     // private readonly contact: ContactController
     constructor(indexModel, indexView) {
         this.indexModel = indexModel;
         this.indexView = indexView;
-        this.createAppointment = Appointment.create();
+        this.createAppointment = CreateAppointment.create();
+        this.updateAppointment = UpdateAppointment.create();
         // this.menu = Menu.create()
         // this.error = Error404.create()
         // this.contact = Contact.create()
@@ -25,6 +28,9 @@ export default class IndexController {
             case 'create-appointment':
                 this.loadCreateAppointment();
                 break;
+            case 'update-appointment':
+                this.loadUpdateAppointment();
+                break;
             default:
                 console.log('Error');
             //this.loadError();
@@ -32,5 +38,8 @@ export default class IndexController {
     };
     loadCreateAppointment = async () => {
         this.createAppointment.init();
+    };
+    loadUpdateAppointment = async () => {
+        this.updateAppointment.init();
     };
 }

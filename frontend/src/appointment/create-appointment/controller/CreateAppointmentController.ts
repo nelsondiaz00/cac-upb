@@ -1,5 +1,5 @@
-import CreateAppointmentModel from '../model/AppointmentModel.js';
-import CreateAppointmentView from '../view/AppointmentView.js';
+import CreateAppointmentModel from '../model/CreateAppointmentModel.js';
+import CreateAppointmentView from '../view/CreateAppointmentView.js';
 
 export default class CreateAppointmentController {
   private model: CreateAppointmentModel;

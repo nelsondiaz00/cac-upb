@@ -1,4 +1,4 @@
-import Client from '../../client/types/Client.js';
+import Client from '../../../client/types/Client.js';
 
 export default class Appointment {
   private id: string;
@@ -49,7 +49,10 @@ export default class Appointment {
   }
 
   public getDate(): Date {
-    return this.date;
+    if (this.date instanceof Date) {
+      return this.date;
+    }
+    return new Date(this.date);
   }
 
   public setDate(date: Date): void {

@@ -31,3 +31,17 @@ header {
   display: inline-block;
   margin-right: 5px;
 }
+
+input[readonly] {
+  color: gray;
+}
+
+.update-main-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.components-container {
+  display: flex;
+  flex-direction: row;
+}

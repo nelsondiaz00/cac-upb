@@ -1,5 +1,5 @@
-import NullPerson from '../../shared/NullPerson';
-import Appointment from './Appointment';
+import NullPerson from '../../../shared/NullPerson.js';
+import Appointment from './Appointment.js';
 
 export default class NullAppointment extends Appointment {
   constructor() {

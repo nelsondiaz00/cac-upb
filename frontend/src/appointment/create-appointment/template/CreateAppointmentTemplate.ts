@@ -1,6 +1,6 @@
-import Client from '../../client/types/Client';
+import Client from '../../../client/types/Client.js';
 
-export default class AppointmentTemplate {
+export default class CreateAppointmentTemplate {
   public static async render(): Promise<string> {
     return `<header>
       <h1>CAC-UPB</h1>  

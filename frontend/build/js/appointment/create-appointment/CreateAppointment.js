@@ -1,7 +1,7 @@
 import CreateAppointmentController from './controller/CreateAppointmentController.js';
 import CreateAppointmentModel from './model/CreateAppointmentModel.js';
 import CreateAppointmentView from './view/CreateAppointmentView.js';
-export default class Appointment {
+export default class CreateAppointment {
     static create() {
         const model = new CreateAppointmentModel();
         const view = new CreateAppointmentView(model);

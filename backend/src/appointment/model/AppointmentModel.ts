@@ -152,7 +152,7 @@ export default class AppointmentModel {
 
     const queryUpdateAppointment = `
       UPDATE Appointment 
-      SET client_id = ?, type = ?, date = ?, address = ?
+      SET client_id = ?, type = ?, date = ?, address = ?, description = ?
       WHERE id = ?;
     `;
 
@@ -165,12 +165,13 @@ export default class AppointmentModel {
     }
 
     const clientId = (rows[0] as { id: number }).id;
-
+    // console.log(appointment.getDescription());
     await this.connection.execute(queryUpdateAppointment, [
       clientId,
       appointment.getType(),
       appointment.getDate(),
       appointment.getAddress(),
+      appointment.getDescription(),
       appointment.getId(),
     ]);
   };

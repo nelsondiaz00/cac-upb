@@ -38,7 +38,10 @@ export default abstract class AbstractPerson {
   }
 
   public getBirthday(): Date {
-    return this.birthday;
+    if (this.birthday instanceof Date) {
+      return this.birthday;
+    }
+    return new Date(this.birthday);
   }
 
   public getAddress(): string {

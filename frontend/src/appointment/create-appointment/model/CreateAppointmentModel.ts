@@ -1,9 +1,9 @@
-import Client from '../../client/types/Client.js';
-import Environment from '../../shared/Environment.js';
-import NullPerson from '../../shared/NullPerson.js';
-import Appointment from '../types/Appointment.js';
-import Subject from '../types/Subject.js';
-import CreateAppointmentView from '../view/AppointmentView.js';
+import Client from '../../../client/types/Client.js';
+import Environment from '../../../shared/Environment.js';
+import NullPerson from '../../../shared/NullPerson.js';
+import Appointment from '../../shared/types/Appointment.js';
+import Subject from '../../shared/types/Subject.js';
+import CreateAppointmentView from '../view/CreateAppointmentView.js';
 
 export default class CreateAppointmentModel extends Subject<CreateAppointmentView> {
   constructor() {

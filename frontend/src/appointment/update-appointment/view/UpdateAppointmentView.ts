@@ -1,15 +1,17 @@
-import CreateAppointmentModel from '../model/AppointmentModel.js';
-import AppointmentTemplate from '../template/AppointmentTemplate.js';
-import AppointmentTemplateModal from '../template/AppointmentTemplateModal.js';
-import Appointment from '../types/Appointment.js';
-import Observer from '../types/Observer.js';
+import UpdateAppointmentModel from '../model/UpdateAppointmentModel.js';
+import AppointmentTemplateModal from '../../shared/template/AppointmentTemplateModal.js';
+import UpdateAppointmentTemplate from '../template/UpdateAppointmentTemplate.js';
+import Appointment from '../../shared/types/Appointment.js';
+// import AppointmentTemplateModal from '../template/AppointmentTemplateModal.js';
+// import Appointment from '../types/Appointment.js';
+import Observer from '../../shared/types/Observer.js';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default class CreateAppointmentView extends Observer<CreateAppointmentModel> {
+export default class UpdateAppointmentView extends Observer<UpdateAppointmentModel> {
   private selector: HTMLDivElement;
   private selectorName = 'appointment';
 
-  constructor(subject: CreateAppointmentModel) {
+  constructor(subject: UpdateAppointmentModel) {
     super(subject);
     this.selector = document.createElement('div');
   }
@@ -28,47 +30,70 @@ export default class CreateAppointmentView extends Observer<CreateAppointmentMod
     this.selector.innerHTML = '';
     const div = document.createElement('div');
     div.className = 'appointment';
-    div.innerHTML = await AppointmentTemplate.render();
+    div.innerHTML = await UpdateAppointmentTemplate.render();
     this.selector.appendChild(div);
   }
 
   public addListeners(): void {
     window.addEventListener('DOMContentLoaded', () => {
       this.addSubmitListeners();
-      // const submitIdentification = document.querySelector(
-      //   '#submit-identification-user'
-      // ) as HTMLButtonElement;
-
-      // console.log(submitIdentification);
     });
   }
 
   public addSubmitListeners(): void {
+    const idAppointment = document.querySelector(
+      '#appointment_id'
+    ) as HTMLInputElement;
+    const submitIdentificationAppointment = document.querySelector(
+      '#submit-appointment-id'
+    ) as HTMLButtonElement;
+    submitIdentificationAppointment.addEventListener('click', async () => {
+      console.log('submitIdentificationAppointment');
+      const info_appointment = document.querySelector(
+        '#components-container'
+      ) as HTMLFormElement;
+      const appointment = await (
+        this.subject as UpdateAppointmentModel
+      ).getAppointmentById(idAppointment.value);
+      // console.log(info_appointment);
+
+      const newFormContent = await UpdateAppointmentTemplate.renderAppointment(
+        appointment
+      );
+      if (info_appointment) {
+        info_appointment.innerHTML = newFormContent;
+        this.addSubmitListeners();
+      }
+    });
+
     const identificationUser = document.querySelector(
-      '#user_identification_get'
+      '#user_identification'
     ) as HTMLInputElement;
 
-    const submitIdentification = document.querySelector(
+    const submitIdentificationUser = document.querySelector(
       '#submit-identification-user'
     ) as HTMLButtonElement;
-
-    submitIdentification.addEventListener('click', async () => {
+    console.log(submitIdentificationUser);
+    submitIdentificationUser.addEventListener('click', async () => {
+      console.log('click');
       const form_user = document.querySelector('#form_user') as HTMLFormElement;
       const client = await (
-        this.subject as CreateAppointmentModel
+        this.subject as UpdateAppointmentModel
       ).getUserByIdentification(identificationUser.value);
-      const newFormContent = await AppointmentTemplate.renderClient(client);
-
+      const newFormContent = await UpdateAppointmentTemplate.renderClient(
+        client
+      );
+      console.log(form_user);
       if (form_user) {
         form_user.innerHTML = newFormContent;
+        this.addSubmitListeners();
       }
-      console.log(client);
+      // console.log(client);
     });
 
     const submitAppointment = document.querySelector(
       '#submit-appointment'
     ) as HTMLButtonElement;
-
     submitAppointment.addEventListener('click', async () => {
       // const form_user = document.querySelector('#form_user') as HTMLFormElement;
       const appointmentType = document.querySelector(
@@ -86,33 +111,27 @@ export default class CreateAppointmentView extends Observer<CreateAppointmentMod
       const appointmentAddress = document.querySelector(
         '#appointment_address'
       ) as HTMLSelectElement;
-
       const client = await (
-        this.subject as CreateAppointmentModel
+        this.subject as UpdateAppointmentModel
       ).getUserByIdentification(identificationUser.value);
-
       if (!client) {
         console.error('No se encontró el cliente');
         return;
       }
-
       const combinedDateTime = new Date(
         `${appointmentDate.value}T${appointmentHour.value}:00`
       );
-
       const newAppointment = new Appointment(
-        '0',
+        idAppointment.value,
         client,
         appointmentType.value,
         combinedDateTime,
         appointmentAddress.value,
         appointmentDescription.value
       );
-
       const response = await (
-        this.subject as CreateAppointmentModel
-      ).createAppointment(newAppointment);
-
+        this.subject as UpdateAppointmentModel
+      ).updateAppointment(newAppointment);
       if (response) {
         const toastHTML =
           await AppointmentTemplateModal.renderAppointmentCreated();
@@ -138,10 +157,7 @@ export default class CreateAppointmentView extends Observer<CreateAppointmentMod
           '#user_birthday'
         ) as HTMLInputElement;
 
-        const userIdentificationGet = document.querySelector(
-          '#user_identification_get'
-        ) as HTMLInputElement;
-        userIdentificationGet.value = '';
+        idAppointment.value = '';
         userIdentification.value = '';
         userName.value = '';
         userLastName.value = '';

@@ -1,9 +1,37 @@
 import { Request, Response } from 'express';
 import path from 'path';
+import fs from 'fs';
 
 export default class ClientPublicController {
-  public index = (_req: Request, res: Response): void => {
-    res.status(200).sendFile(path.resolve(__dirname, '../public/index.html'));
+  public index = (req: Request, res: Response): void => {
+    const { module } = req.params;
+    const filePath = path.resolve(__dirname, '../public/index.html');
+
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+        console.error('Error leyendo el archivo:', err);
+        res.status(500).send('Error del servidor');
+        return;
+      }
+
+      let pageValue = '';
+      switch (module) {
+        case 'create-appointment':
+          pageValue = module;
+          break;
+        case 'update-appointment':
+          pageValue = module;
+          break;
+        default:
+          pageValue = 'default';
+      }
+      const modifiedData = data.replace(
+        /(meta name="path" page=")[^"]*(")/,
+        `$1${pageValue}$2`
+      );
+
+      res.status(200).send(modifiedData);
+    });
   };
 
   public not_found = (_req: Request, res: Response): void => {

@@ -5,8 +5,9 @@ import AppointmentView from '../appointment/view/AppointmentView';
 import TicketView from '../ticket/view/TicketView';
 import EmployeeView from '../employee/view/EmployeeView';
 import ClientView from '../client-component/view/ClientView';
-import ClientAppointmentPublicView from '../client/client-appointment/view/ClientPublicView';
-import ClientTicketPublicView from '../client/client-ticket/view/ClientPublicView';
+import ClientAppointmentPublicView from '../client/client-appointment/view/ClientAppointmentPublicView';
+import ClientTicketPublicView from '../client/client-ticket/view/ClientTicketPublicView';
+import ClientEmployeePublicView from '../client/client-employee/view/ClientEmployeePublicView';
 
 export default class Server {
   private readonly app: Application;
@@ -17,7 +18,8 @@ export default class Server {
     private readonly employeeView: EmployeeView,
     private readonly clientView: ClientView,
     private readonly clientAppointmentPublicView: ClientAppointmentPublicView,
-    private readonly clientTicketPublicView: ClientTicketPublicView
+    private readonly clientTicketPublicView: ClientTicketPublicView,
+    private readonly clientEmployeePublicView: ClientEmployeePublicView
   ) {
     this.app = express();
     this.statics();
@@ -42,6 +44,12 @@ export default class Server {
       '/ticket',
       express.static(path.resolve(__dirname, '../client/client-ticket/public'))
     );
+    this.app.use(
+      '/employee',
+      express.static(
+        path.resolve(__dirname, '../client/client-employee/public')
+      )
+    );
   };
 
   public routes = (): void => {
@@ -59,6 +67,8 @@ export default class Server {
       this.clientAppointmentPublicView.router
     );
     this.app.use('/ticket', cors(), this.clientTicketPublicView.router);
+    this.app.use('/employee', cors(), this.clientEmployeePublicView.router);
+
     // this.app.use('/', cors(), this.clientAppointmentPublicView.router);
     //this.app.use('*', cors(), this.clientAppointmentPublicView.router);
   };

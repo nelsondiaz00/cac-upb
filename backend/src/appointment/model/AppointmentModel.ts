@@ -239,8 +239,8 @@ export default class AppointmentModel {
     `;
 
     const queryInsertDeletedAppointment = `
-      INSERT INTO DeletedAppointment (id, client_id, type, date, address)
-      VALUES (?, ?, ?, ?, ?);
+      INSERT INTO DeletedAppointment (id, client_id, type, date, address, description)
+      VALUES (?, ?, ?, ?, ?, ?);
     `;
 
     const queryDeleteAppointment = `
@@ -267,6 +267,7 @@ export default class AppointmentModel {
         appointment.type,
         appointment.date,
         appointment.address,
+        appointment.description,
       ]);
 
       await this.connection.execute(queryDeleteAppointment, [id]);

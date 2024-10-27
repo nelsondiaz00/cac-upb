@@ -1,0 +1,18 @@
+import EndPoint from './EndPoint.js';
+
+export default class Environment {
+  public static readonly getAppointments = async (): Promise<string> => {
+    const env = await fetch('./js/env/env.json');
+    const json = await env.json();
+    const endpoint = json['appointment/get'] as EndPoint;
+    return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}`;
+  };
+
+  public static readonly getAppointmentsCanceled =
+    async (): Promise<string> => {
+      const env = await fetch('./js/env/env.json');
+      const json = await env.json();
+      const endpoint = json['appointment-canceled/get'] as EndPoint;
+      return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}`;
+    };
+}

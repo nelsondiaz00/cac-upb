@@ -52,7 +52,8 @@ export default class TicketModel {
             clientRow.name,
             clientRow.lastname,
             new Date(clientRow.birthday),
-            clientRow.address
+            clientRow.address,
+            clientRow.premium
           );
 
           const appointment = new Appointment(
@@ -97,7 +98,8 @@ export default class TicketModel {
             clientRow.name,
             clientRow.lastname,
             new Date(clientRow.birthday),
-            clientRow.address
+            clientRow.address,
+            clientRow.premium
           );
           const appointment = new Appointment(
             appointmentRow.id,
@@ -139,7 +141,8 @@ export default class TicketModel {
           clientRow.name,
           clientRow.lastname,
           new Date(clientRow.birthday),
-          clientRow.address
+          clientRow.address,
+          clientRow.premium
         );
         const appointment = new Appointment(
           appointmentRow.id,

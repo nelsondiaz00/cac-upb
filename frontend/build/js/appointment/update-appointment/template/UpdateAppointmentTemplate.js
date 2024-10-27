@@ -173,6 +173,14 @@ export default class UpdateAppointmentTemplate {
             class="btn form-control w-50 bg-success text-white"
           />
         </div>
+        <div class="mb-3 text-end">
+          <button 
+            type="button" 
+            class="btn  w-50 btn-danger"
+            id="delete-appointment"
+            >Cancelar cita
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -342,13 +350,21 @@ export default class UpdateAppointmentTemplate {
                   </select>
               </div>
               <div class="mb-3 text-end">
-                  <input
-                      id="submit-appointment"
-                      type="button"
-                      value="Actualizar cita"
-                      class="btn form-control w-50 bg-success text-white"
-                  />
-              </div>
+          <input
+            id="submit-appointment"
+            type="button"
+            value="Actualizar cita"
+            class="btn form-control w-50 bg-success text-white"
+          />
+        </div>
+        <div class="mb-3 text-end">
+          <button 
+            type="button" 
+            class="btn  w-50 btn-danger"
+            id="delete-appointment"
+            >Cancelar cita
+          </button>
+        </div>
           </form>
       </div>
 

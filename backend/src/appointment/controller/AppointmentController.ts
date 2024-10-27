@@ -15,9 +15,15 @@ export default class AppointmentController {
     const { id } = req.params;
     if (id) {
       const appointment = await this.appointmentModel.getAppointmentById(id);
-      res.json(appointment);
+      if (!appointment.isNull()) {
+        res.status(200).json(appointment);
+      } else {
+        // console.log(new NullAppointment(), ' xd');
+        res.status(404).json(new NullAppointment());
+      }
     } else {
-      res.json(NullAppointment);
+      res.json(new NullAppointment());
+      console.log('envió null');
     }
   };
 
@@ -60,7 +66,8 @@ export default class AppointmentController {
         '',
         '',
         new Date(''),
-        ''
+        '',
+        false
       );
 
       const appointment = new Appointment(
@@ -105,7 +112,8 @@ export default class AppointmentController {
         '',
         '',
         new Date(),
-        ''
+        '',
+        false
       );
 
       const appointment = new Appointment(

@@ -1,6 +1,6 @@
 import Client from '../../../client/types/Client.js';
+import NullClient from '../../../client/types/NullClient.js';
 import Environment from '../../../shared/Environment.js';
-import NullPerson from '../../../shared/NullPerson.js';
 import Subject from '../../shared/types/Subject.js';
 export default class CreateAppointmentModel extends Subject {
     constructor() {
@@ -13,16 +13,16 @@ export default class CreateAppointmentModel extends Subject {
     getUserByIdentification = async (id) => {
         const response = await fetch(await Environment.getClientByIdentification(id));
         if (response.status !== 200) {
-            return new NullPerson();
+            return new NullClient();
         }
         try {
             const responseData = await response.json();
-            const client = new Client(responseData.identification, responseData.name, responseData.lastname, responseData.birthday, responseData.address);
+            const client = new Client(responseData.identification, responseData.name, responseData.lastname, responseData.birthday, responseData.address, responseData.premium);
             return client;
         }
         catch (e) {
             console.log('acá');
-            return new NullPerson();
+            return new NullClient();
         }
     };
     createAppointment = async (appointment) => {

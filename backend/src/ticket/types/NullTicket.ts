@@ -6,7 +6,7 @@ export default class NullTicket extends Ticket {
     super('', new NullAppointment());
   }
 
-  public isNull(): boolean {
+  public override isNull(): boolean {
     return true;
   }
 }

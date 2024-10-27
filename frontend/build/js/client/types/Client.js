@@ -1,9 +1,17 @@
 import AbstractPerson from '../../shared/AbstractPerson.js';
 export default class Client extends AbstractPerson {
-    constructor(identification, name, lastname, birthday, address) {
+    premium = false;
+    constructor(identification, name, lastname, birthday, address, premium) {
         super(identification, name, lastname, birthday, address);
+        this.premium = premium;
     }
     isNull() {
         return false;
+    }
+    isPremium() {
+        return this.premium;
+    }
+    setPremium(premium) {
+        this.premium = premium;
     }
 }

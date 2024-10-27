@@ -1,9 +1,9 @@
-import NullPerson from '../../shared/NullPerson';
+import NullClient from '../../client-component/types/NullClient';
 import Appointment from './Appointment';
 
 export default class NullAppointment extends Appointment {
   constructor() {
-    super('', new NullPerson(), '', new Date(), '', '');
+    super('', new NullClient(), '', new Date(), '', '');
   }
 
   public override isNull(): boolean {

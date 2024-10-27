@@ -130,6 +130,8 @@ export default class TicketModel {
         console.log("Can't create ticket for past appointments");
         return new NullTicket();
       }
+      console.log(currentDate);
+
       const [clientRows]: any = await this.connection.execute(
         'SELECT * FROM Client WHERE id = ?',
         [appointmentRow.client_id]
@@ -158,6 +160,7 @@ export default class TicketModel {
           [appointmentRow.id]
         );
         if (existingTicketRows.length > 0) {
+          console.log('Ticket already exists');
           return new NullTicket();
         }
 
@@ -182,11 +185,11 @@ export default class TicketModel {
 
   public async deleteTicket(id: string): Promise<boolean> {
     const [ticketRows]: any = await this.connection.execute(
-      'SELECT * FROM Ticket WHERE id = ?',
+      'SELECT * FROM Ticket WHERE turn = ?',
       [id]
     );
     if (ticketRows.length > 0) {
-      await this.connection.execute('DELETE FROM Ticket WHERE id = ?', [id]);
+      await this.connection.execute('DELETE FROM Ticket WHERE turn = ?', [id]);
       return true;
     }
     return false;

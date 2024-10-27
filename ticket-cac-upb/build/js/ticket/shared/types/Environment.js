@@ -1,5 +1,5 @@
 export default class Environment {
-    static createAppointment = async (id) => {
+    static createTicket = async (id) => {
         const env = await fetch('./js/env/env.json');
         const json = await env.json();
         const endpoint = json['ticket/create'];

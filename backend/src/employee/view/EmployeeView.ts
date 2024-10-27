@@ -11,7 +11,7 @@ export default class EmployeeView {
 
   public routes = (): void => {
     this.router.get(
-      '/employee',
+      '/',
       this.employeeController.getEmployees.bind(this.employeeController)
     );
 

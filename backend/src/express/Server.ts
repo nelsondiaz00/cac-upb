@@ -5,7 +5,8 @@ import AppointmentView from '../appointment/view/AppointmentView';
 import TicketView from '../ticket/view/TicketView';
 import EmployeeView from '../employee/view/EmployeeView';
 import ClientView from '../client-component/view/ClientView';
-import ClientPublicView from '../client/view/ClientPublicView';
+import ClientAppointmentPublicView from '../client/client-appointment/view/ClientPublicView';
+import ClientTicketPublicView from '../client/client-ticket/view/ClientPublicView';
 
 export default class Server {
   private readonly app: Application;
@@ -15,7 +16,8 @@ export default class Server {
     private readonly ticketView: TicketView,
     private readonly employeeView: EmployeeView,
     private readonly clientView: ClientView,
-    private readonly clientPublicView: ClientPublicView
+    private readonly clientAppointmentPublicView: ClientAppointmentPublicView,
+    private readonly clientTicketPublicView: ClientTicketPublicView
   ) {
     this.app = express();
     this.statics();
@@ -30,16 +32,35 @@ export default class Server {
   };
 
   public statics = (): void => {
-    this.app.use(express.static(path.resolve(__dirname, '../client/public')));
+    this.app.use(
+      '/appointment',
+      express.static(
+        path.resolve(__dirname, '../client/client-appointment/public')
+      )
+    );
+    this.app.use(
+      '/ticket',
+      express.static(path.resolve(__dirname, '../client/client-ticket/public'))
+    );
   };
 
   public routes = (): void => {
-    this.app.use('/api/v1.0/cac', cors(), this.appointmentView.router);
-    this.app.use('/api/v1.0/cac', cors(), this.ticketView.router);
-    this.app.use('/api/v1.0/cac', cors(), this.employeeView.router);
-    this.app.use('/api/v1.0/cac', cors(), this.clientView.router);
-    this.app.use('/', cors(), this.clientPublicView.router);
-    this.app.use('*', cors(), this.clientPublicView.router);
+    this.app.use(
+      '/api/v1.0/cac/appointments',
+      cors(),
+      this.appointmentView.router
+    );
+    this.app.use('/api/v1.0/cac/tickets', cors(), this.ticketView.router);
+    this.app.use('/api/v1.0/cac/employees', cors(), this.employeeView.router);
+    this.app.use('/api/v1.0/cac/clients', cors(), this.clientView.router);
+    this.app.use(
+      '/appointment',
+      cors(),
+      this.clientAppointmentPublicView.router
+    );
+    this.app.use('/ticket', cors(), this.clientTicketPublicView.router);
+    // this.app.use('/', cors(), this.clientAppointmentPublicView.router);
+    //this.app.use('*', cors(), this.clientAppointmentPublicView.router);
   };
 
   public start = (): void => {

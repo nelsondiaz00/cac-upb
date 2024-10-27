@@ -1,4 +1,4 @@
-import Client from '../../../client/types/Client.js';
+import Client from './Client.js';
 
 export default class Appointment {
   private id: string;

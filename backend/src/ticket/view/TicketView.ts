@@ -16,7 +16,7 @@ export default class TicketView {
     );
 
     this.router.get(
-      '/ticket',
+      '/',
       this.ticketController.getTickets.bind(this.ticketController)
     );
 

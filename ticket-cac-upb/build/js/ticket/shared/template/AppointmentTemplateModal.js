@@ -1,6 +1,6 @@
 export default class AppointmentTemplateModal {
-  public static async renderSuccessful(message: string): Promise<string> {
-    return `
+    static async renderSuccessful(message) {
+        return `
             <div class="toast-container position-fixed bottom-0 end-0 p-3">
             <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
@@ -14,10 +14,9 @@ export default class AppointmentTemplateModal {
                 </div>
             </div>
             </div>`;
-  }
-
-  public static async renderError(message: string): Promise<string> {
-    return `
+    }
+    static async renderError(message) {
+        return `
             <div class="toast-container position-fixed bottom-0 end-0 p-3">
             <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
@@ -31,5 +30,5 @@ export default class AppointmentTemplateModal {
                 </div>
             </div>
             </div>`;
-  }
+    }
 }

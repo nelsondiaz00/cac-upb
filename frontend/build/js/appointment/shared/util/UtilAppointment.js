@@ -1,14 +1,14 @@
-import AppointmentTemplateModal from '../template/AppointmentTemplateModal.js';
+import BootstrapTemplateToasts from '../template/BootstrapTemplateToasts.js';
 export default class UtilAppointment {
     static async showToast(modalType, messageModal) {
         let toastHTML = '';
         if (modalType === 'success') {
             console.log('success');
-            toastHTML = await AppointmentTemplateModal.renderSuccessful(messageModal);
+            toastHTML = await BootstrapTemplateToasts.renderSuccessful(messageModal);
         }
         else {
             console.log('error');
-            toastHTML = await AppointmentTemplateModal.renderError(messageModal);
+            toastHTML = await BootstrapTemplateToasts.renderError(messageModal);
         }
         let toastContainer = document.querySelector('.toast-container');
         if (!toastContainer) {

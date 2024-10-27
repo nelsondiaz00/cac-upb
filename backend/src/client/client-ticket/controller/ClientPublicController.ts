@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import path from 'path';
 import fs from 'fs';
 
-export default class ClientPublicController {
+export default class ClientTicketPublicController {
   public index = (req: Request, res: Response): void => {
     const { module } = req.params;
     const filePath = path.resolve(__dirname, '../public/index.html');
@@ -13,13 +13,15 @@ export default class ClientPublicController {
         res.status(500).send('Error del servidor');
         return;
       }
+      // console.log('acá llegó ', module);
 
       let pageValue = '';
       switch (module) {
-        case 'create-appointment':
+        case 'create':
           pageValue = module;
           break;
-        case 'update-appointment':
+        case 'update':
+          console.log('update');
           pageValue = module;
           break;
         default:

@@ -18,14 +18,14 @@ export default class AppointmentView {
     );
 
     this.router.get(
-      '/appointment',
+      '/',
       this.appointmentController.getAppointments.bind(
         this.appointmentController
       )
     );
 
     this.router.get(
-      '/appointmentDeleted',
+      '/appointments-deleted',
       this.appointmentController.getAppointmentsDeleted.bind(
         this.appointmentController
       )

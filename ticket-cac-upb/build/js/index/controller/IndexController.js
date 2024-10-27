@@ -1,43 +1,39 @@
+import CreateTicket from '../../ticket/create-ticket/CreateTicket.js';
 // import IndexView from '../view/IndexView.js'
 export default class IndexController {
     indexModel;
     indexView;
-    createAppointment;
-    updateAppointment;
+    createTicket;
     // private readonly movies: MoviesController
     // private readonly error: ErrorController
     // private readonly contact: ContactController
     constructor(indexModel, indexView) {
         this.indexModel = indexModel;
         this.indexView = indexView;
-        this.createAppointment = CreateAppointment.create();
-        this.updateAppointment = UpdateAppointment.create();
+        this.createTicket = CreateTicket.create();
         // this.menu = Menu.create()
         // this.error = Error404.create()
         // this.contact = Contact.create()
     }
     init = async () => {
         this.indexModel.init();
+        // console.log('wtf');
         this.loadMain(this.indexView.getPageFromMeta());
     };
     loadMain = async (component) => {
         this.indexView.renderMain(component ?? 'error');
+        console.log('xd');
         switch (component) {
-            case 'create-appointment':
-                this.loadCreateAppointment();
-                break;
-            case 'update-appointment':
-                this.loadUpdateAppointment();
+            case 'create':
+                this.loadCreateTicket();
+                // console.log('create');
                 break;
             default:
                 console.log('Error');
             //this.loadError();
         }
     };
-    loadCreateAppointment = async () => {
-        this.createAppointment.init();
-    };
-    loadUpdateAppointment = async () => {
-        this.updateAppointment.init();
+    loadCreateTicket = async () => {
+        this.createTicket.init();
     };
 }

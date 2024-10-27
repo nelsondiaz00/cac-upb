@@ -30,7 +30,7 @@ export default class TicketController {
         res.status(200).json(ticket);
       }
     } else {
-      res.json(NullTicket);
+      res.status(404).json(NullTicket);
     }
   };
 
@@ -42,7 +42,7 @@ export default class TicketController {
         ? res.status(200).json({ message: 'Ticket deleted' })
         : res.status(404).json({ message: 'Ticket not found' });
     } else {
-      res.json(NullTicket);
+      res.status(404).json(NullTicket);
     }
   };
 }

@@ -25,11 +25,14 @@ export default class IndexController {
     loadMain = async (component) => {
         this.indexView.renderMain(component ?? 'error');
         switch (component) {
-            case 'create-appointment':
+            case 'create':
                 this.loadCreateAppointment();
                 break;
-            case 'update-appointment':
+            case 'update':
                 this.loadUpdateAppointment();
+                break;
+            case 'default':
+                console.log('Defaultt');
                 break;
             default:
                 console.log('Error');

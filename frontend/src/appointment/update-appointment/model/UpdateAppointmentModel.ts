@@ -1,7 +1,6 @@
 import Client from '../../../client/types/Client.js';
+import NullClient from '../../../client/types/NullClient.js';
 import Environment from '../../../shared/Environment.js';
-import NullPerson from '../../../shared/NullPerson.js';
-// import NullPerson from '../../shared/NullPerson.js';
 import Appointment from '../../shared/types/Appointment.js';
 import NullAppointment from '../../shared/types/NullAppointment.js';
 import Subject from '../../shared/types/Subject.js';
@@ -18,19 +17,23 @@ export default class UpdateAppointmentModel extends Subject<UpdateAppointmentVie
   };
 
   public getAppointmentById = async (id: string): Promise<Appointment> => {
-    const response = await fetch(await Environment.getAppointmentById(id));
-    if (response.status !== 200) {
-      return new NullAppointment();
-    }
-
     try {
+      const response = await fetch(await Environment.getAppointmentById(id));
+      if (response.status !== 200) {
+        return new NullAppointment();
+      }
+
       const responseData = await response.json();
+
+      console.log(responseData);
+
       const client = new Client(
         responseData.client.identification,
         responseData.client.name,
         responseData.client.lastname,
         responseData.client.birthday,
-        responseData.client.address
+        responseData.client.address,
+        responseData.client.premium
       );
 
       const appointment = new Appointment(
@@ -53,7 +56,7 @@ export default class UpdateAppointmentModel extends Subject<UpdateAppointmentVie
       await Environment.getClientByIdentification(id)
     );
     if (response.status !== 200) {
-      return new NullPerson();
+      return new NullClient();
     }
     try {
       const responseData = await response.json();
@@ -62,11 +65,12 @@ export default class UpdateAppointmentModel extends Subject<UpdateAppointmentVie
         responseData.name,
         responseData.lastname,
         responseData.birthday,
-        responseData.address
+        responseData.address,
+        responseData.premium
       );
       return client;
     } catch (e) {
-      return new NullPerson();
+      return new NullClient();
     }
   };
 
@@ -98,6 +102,24 @@ export default class UpdateAppointmentModel extends Subject<UpdateAppointmentVie
         return false;
       } else {
         console.log('Appointment updated');
+        return true;
+      }
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  };
+
+  public deleteAppointment = async (id: string): Promise<boolean> => {
+    try {
+      const response = await fetch(await Environment.deleteAppointment(id), {
+        method: 'DELETE',
+      });
+      if (response.status !== 200) {
+        console.log('Error deleting appointment');
+        return false;
+      } else {
+        console.log('Appointment deleted');
         return true;
       }
     } catch (e) {

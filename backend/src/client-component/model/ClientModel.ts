@@ -34,11 +34,12 @@ export default class ClientModel {
         clientRow.name,
         clientRow.lastname,
         new Date(clientRow.birthday),
-        clientRow.address
+        clientRow.address,
+        clientRow.premium
       );
       return client;
     }
-    return new Client('', '', '', new Date(), '');
+    return new Client('', '', '', new Date(), '', false);
   }
 
   public async getClients(): Promise<Client[]> {
@@ -52,7 +53,8 @@ export default class ClientModel {
         clientRow.name,
         clientRow.lastname,
         new Date(clientRow.birthday),
-        clientRow.address
+        clientRow.address,
+        clientRow.premium
       );
       clients.push(client);
     }

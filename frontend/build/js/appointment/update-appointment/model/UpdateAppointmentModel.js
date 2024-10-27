@@ -1,7 +1,6 @@
 import Client from '../../../client/types/Client.js';
+import NullClient from '../../../client/types/NullClient.js';
 import Environment from '../../../shared/Environment.js';
-import NullPerson from '../../../shared/NullPerson.js';
-// import NullPerson from '../../shared/NullPerson.js';
 import Appointment from '../../shared/types/Appointment.js';
 import NullAppointment from '../../shared/types/NullAppointment.js';
 import Subject from '../../shared/types/Subject.js';
@@ -14,13 +13,14 @@ export default class UpdateAppointmentModel extends Subject {
         this.notifyAllObservers();
     };
     getAppointmentById = async (id) => {
-        const response = await fetch(await Environment.getAppointmentById(id));
-        if (response.status !== 200) {
-            return new NullAppointment();
-        }
         try {
+            const response = await fetch(await Environment.getAppointmentById(id));
+            if (response.status !== 200) {
+                return new NullAppointment();
+            }
             const responseData = await response.json();
-            const client = new Client(responseData.client.identification, responseData.client.name, responseData.client.lastname, responseData.client.birthday, responseData.client.address);
+            console.log(responseData);
+            const client = new Client(responseData.client.identification, responseData.client.name, responseData.client.lastname, responseData.client.birthday, responseData.client.address, responseData.client.premium);
             const appointment = new Appointment(responseData.id, client, responseData.type, responseData.date, responseData.address, responseData.description);
             return appointment;
         }
@@ -31,15 +31,15 @@ export default class UpdateAppointmentModel extends Subject {
     getUserByIdentification = async (id) => {
         const response = await fetch(await Environment.getClientByIdentification(id));
         if (response.status !== 200) {
-            return new NullPerson();
+            return new NullClient();
         }
         try {
             const responseData = await response.json();
-            const client = new Client(responseData.identification, responseData.name, responseData.lastname, responseData.birthday, responseData.address);
+            const client = new Client(responseData.identification, responseData.name, responseData.lastname, responseData.birthday, responseData.address, responseData.premium);
             return client;
         }
         catch (e) {
-            return new NullPerson();
+            return new NullClient();
         }
     };
     updateAppointment = async (appointment) => {
@@ -69,6 +69,25 @@ export default class UpdateAppointmentModel extends Subject {
             }
             else {
                 console.log('Appointment updated');
+                return true;
+            }
+        }
+        catch (e) {
+            console.log(e);
+            return false;
+        }
+    };
+    deleteAppointment = async (id) => {
+        try {
+            const response = await fetch(await Environment.deleteAppointment(id), {
+                method: 'DELETE',
+            });
+            if (response.status !== 200) {
+                console.log('Error deleting appointment');
+                return false;
+            }
+            else {
+                console.log('Appointment deleted');
                 return true;
             }
         }

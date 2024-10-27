@@ -44,7 +44,8 @@ export default class AppointmentModel {
           clientRow.name,
           clientRow.lastname,
           new Date(clientRow.birthday),
-          clientRow.address
+          clientRow.address,
+          clientRow.premium
         );
 
         const appointment = new Appointment(
@@ -84,7 +85,8 @@ export default class AppointmentModel {
           clientRow.name,
           clientRow.lastname,
           new Date(clientRow.birthday),
-          clientRow.address
+          clientRow.address,
+          clientRow.premium
         );
 
         const appointment = new Appointment(
@@ -123,7 +125,8 @@ export default class AppointmentModel {
           clientRow.name,
           clientRow.lastname,
           new Date(clientRow.birthday),
-          clientRow.address
+          clientRow.address,
+          clientRow.premium
         );
 
         const appointment = new Appointment(
@@ -189,6 +192,17 @@ export default class AppointmentModel {
       VALUES (?, ?, ?, ?, ?);
     `;
 
+    const queryCountAppointments = `
+      SELECT COUNT(*) as count FROM Appointment 
+      WHERE client_id = ?;
+    `;
+
+    const queryUpdatePremiumStatus = `
+      UPDATE client 
+      SET premium = 1 
+      WHERE id = ?;
+    `;
+
     const [rows]: any = await this.connection.execute(queryClientId, [
       appointment.getClient().getIdentification(),
     ]);
@@ -206,6 +220,17 @@ export default class AppointmentModel {
       appointment.getAddress(),
       appointment.getDescription(),
     ]);
+
+    const [countRows]: any = await this.connection.execute(
+      queryCountAppointments,
+      [clientId]
+    );
+
+    const appointmentCount = (countRows[0] as { count: number }).count;
+    //  console.log(appointmentCount, ' count');
+    if (appointmentCount >= 8) {
+      await this.connection.execute(queryUpdatePremiumStatus, [clientId]);
+    }
   };
 
   public deleteAppointment = async (id: string): Promise<void> => {

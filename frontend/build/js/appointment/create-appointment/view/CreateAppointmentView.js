@@ -1,7 +1,7 @@
 import CreateAppointmentTemplate from '../template/CreateAppointmentTemplate.js';
-import AppointmentTemplateModal from '../../shared/template/AppointmentTemplateModal.js';
 import Appointment from '../../shared/types/Appointment.js';
 import Observer from '../../shared/types/Observer.js';
+import UtilAppointment from '../../shared/util/UtilAppointment.js';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 export default class CreateAppointmentView extends Observer {
     selector;
@@ -41,19 +41,16 @@ export default class CreateAppointmentView extends Observer {
             const form_user = document.querySelector('#form_user');
             const client = await this.subject.getUserByIdentification(identificationUser.value);
             if (!client.getIdentification()) {
-                const toastHTML = await AppointmentTemplateModal.renderError('Error al cargar datos');
-                this.showToast(toastHTML);
+                UtilAppointment.showToast('error', 'Error al cargar datos');
                 return;
             }
             const newFormContent = await CreateAppointmentTemplate.renderClient(client);
             console.log(client);
             if (client.isNull()) {
-                const toastHTML = await AppointmentTemplateModal.renderError('Cliente no encontrado');
-                this.showToast(toastHTML);
+                UtilAppointment.showToast('error', 'Cliente no encontrado');
             }
             else {
-                const toastHTML = await AppointmentTemplateModal.renderSuccessful('Cliente cargado exitosamente');
-                this.showToast(toastHTML);
+                UtilAppointment.showToast('success', 'Cliente cargado exitosamente');
             }
             if (form_user) {
                 form_user.innerHTML = newFormContent;
@@ -77,8 +74,7 @@ export default class CreateAppointmentView extends Observer {
             const newAppointment = new Appointment('0', client, appointmentType.value, combinedDateTime, appointmentAddress.value, appointmentDescription.value);
             const response = await this.subject.createAppointment(newAppointment);
             if (response) {
-                const toastHTML = await AppointmentTemplateModal.renderSuccessful('Cita creada exitosamente');
-                this.showToast(toastHTML);
+                UtilAppointment.showToast('success', 'Cita creada exitosamente');
                 appointmentType.value = '';
                 appointmentDescription.value = '';
                 appointmentDate.value = '';
@@ -98,27 +94,8 @@ export default class CreateAppointmentView extends Observer {
                 userBirthday.value = '';
             }
             else {
-                const toastHTML = await AppointmentTemplateModal.renderError('Cita fallida');
-                this.showToast(toastHTML);
+                UtilAppointment.showToast('error', 'Cita fallida');
             }
         });
-    }
-    showToast(toastHTML) {
-        let toastContainer = document.querySelector('.toast-container');
-        if (!toastContainer) {
-            toastContainer = document.createElement('div');
-            toastContainer.className =
-                'toast-container position-fixed bottom-0 end-0 p-3';
-            document.body.appendChild(toastContainer);
-        }
-        toastContainer.innerHTML = toastHTML;
-        const toastElement = document.getElementById('liveToast');
-        if (toastElement) {
-            const toast = new window.bootstrap.Toast(toastElement);
-            toast.show();
-        }
-        else {
-            console.error('Toast element not found');
-        }
     }
 }

@@ -3,10 +3,12 @@ import Appointment from '../../appointment/types/Appointment';
 export default class Ticket {
   private turn: string;
   private appointment: Appointment;
+  private _isNull: boolean;
 
   constructor(turn: string, appointment: Appointment) {
     this.turn = turn;
     this.appointment = appointment;
+    this._isNull = false;
   }
 
   public getTurn(): string {
@@ -23,5 +25,9 @@ export default class Ticket {
 
   public setAppointment(appointment: Appointment): void {
     this.appointment = appointment;
+  }
+
+  public isNull(): boolean {
+    return this._isNull;
   }
 }

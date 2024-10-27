@@ -1,6 +1,6 @@
 import Client from '../../../client/types/Client.js';
+import NullClient from '../../../client/types/NullClient.js';
 import Environment from '../../../shared/Environment.js';
-import NullPerson from '../../../shared/NullPerson.js';
 import Appointment from '../../shared/types/Appointment.js';
 import Subject from '../../shared/types/Subject.js';
 import CreateAppointmentView from '../view/CreateAppointmentView.js';
@@ -20,7 +20,7 @@ export default class CreateAppointmentModel extends Subject<CreateAppointmentVie
       await Environment.getClientByIdentification(id)
     );
     if (response.status !== 200) {
-      return new NullPerson();
+      return new NullClient();
     }
 
     try {
@@ -30,12 +30,13 @@ export default class CreateAppointmentModel extends Subject<CreateAppointmentVie
         responseData.name,
         responseData.lastname,
         responseData.birthday,
-        responseData.address
+        responseData.address,
+        responseData.premium
       );
       return client;
     } catch (e) {
       console.log('acá');
-      return new NullPerson();
+      return new NullClient();
     }
   };
 

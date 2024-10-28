@@ -21,6 +21,24 @@ header {
   align-items: center;
 }
 
+.circle-red {
+  width: 15px;
+  height: 15px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.circle-green {
+  width: 15px;
+  height: 15px;
+  background-color: green;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
 .table {
   width: 95%;
 }

@@ -21,7 +21,12 @@ export default class ClientEmployeePublicController {
           pageValue = module;
           break;
         case 'appointments-canceled':
-          // console.log('update');
+          pageValue = module;
+          break;
+        case 'create':
+          pageValue = module;
+          break;
+        case 'login':
           pageValue = module;
           break;
         default:

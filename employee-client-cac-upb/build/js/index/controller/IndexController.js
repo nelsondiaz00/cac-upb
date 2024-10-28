@@ -1,3 +1,5 @@
+import CreateEmployee from '../../employee/create-employee/CreateEmployee.js';
+import Login from '../../employee/login-employee/login.js';
 import ShowAppointment from '../../employee/show-appointment/ShowAppointment.js';
 import ShowCancelAppointment from '../../employee/show-cancel-appointment/ShowCancelAppointment.js';
 // import IndexView from '../view/IndexView.js'
@@ -6,11 +8,15 @@ export default class IndexController {
     indexView;
     showAppointment;
     showAppointmentCanceled;
+    createEmployee;
+    login;
     constructor(indexModel, indexView) {
         this.indexModel = indexModel;
         this.indexView = indexView;
         this.showAppointment = ShowAppointment.create();
         this.showAppointmentCanceled = ShowCancelAppointment.create();
+        this.createEmployee = CreateEmployee.create();
+        this.login = Login.create();
     }
     init = async () => {
         this.indexModel.init();
@@ -27,6 +33,12 @@ export default class IndexController {
             case 'appointments-canceled':
                 this.loadAppointmentsCanceled();
                 break;
+            case 'create':
+                this.loadCreateEmployee();
+                break;
+            case 'login':
+                this.loadLogin();
+                break;
             default:
                 console.log('Error');
         }
@@ -36,5 +48,11 @@ export default class IndexController {
     };
     loadAppointmentsCanceled = async () => {
         this.showAppointmentCanceled.init();
+    };
+    loadCreateEmployee = async () => {
+        this.createEmployee.init();
+    };
+    loadLogin = async () => {
+        this.login.init();
     };
 }

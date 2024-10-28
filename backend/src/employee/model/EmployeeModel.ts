@@ -28,7 +28,7 @@ export default class EmployeeModel {
 
   public async getEmployeeById(id: string): Promise<any> {
     const [rows]: any = await this.connection.execute(
-      'SELECT * FROM Employee WHERE id = ?',
+      'SELECT * FROM Employee WHERE email = ?',
       [id]
     );
     return rows[0];
@@ -43,9 +43,9 @@ export default class EmployeeModel {
         employee.getLastname(),
         employee.getBirthday(),
         employee.getAddress(),
-        employee.email,
-        employee.password,
-        employee.role,
+        employee.getEmail(),
+        employee.getPassword(),
+        employee.getRole(),
       ]
     );
   }

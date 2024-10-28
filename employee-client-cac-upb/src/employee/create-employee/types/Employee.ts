@@ -1,5 +1,5 @@
-import AbstractPerson from '../../shared/AbstractPerson';
-import { RoleEmployee } from './RoleEmployee';
+import AbstractPerson from '../../shared/types/AbstractPerson.js';
+import { RoleEmployee } from './RoleEmployee.js';
 
 export default class Employee extends AbstractPerson {
   private email: string;
@@ -25,15 +25,15 @@ export default class Employee extends AbstractPerson {
     return false;
   }
 
-  public getEmail(): string {
+  getEmail(): string {
     return this.email;
   }
 
-  public getPassword(): string {
+  getPassword(): string {
     return this.password;
   }
 
-  public getRole(): RoleEmployee {
+  getRole(): RoleEmployee {
     return this.role;
   }
 }

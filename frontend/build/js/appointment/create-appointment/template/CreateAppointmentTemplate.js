@@ -1,9 +1,9 @@
 export default class CreateAppointmentTemplate {
     static async render() {
-        return `<header>
-      <h1>CAC-UPB</h1>  
-      <h2>PEDIR CITA</h2>
-    </header>
+        return `
+    <div class="name-module">
+      <h3>Crear cita</h3>
+    </div>
     <div class="main-container">
       <div class="container-component">
         <h3 class="text-center">Datos del cliente</h3>

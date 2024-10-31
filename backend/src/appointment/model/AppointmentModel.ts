@@ -54,7 +54,8 @@ export default class AppointmentModel {
           appointmentRow.type,
           new Date(appointmentRow.date),
           appointmentRow.address,
-          appointmentRow.description
+          appointmentRow.description,
+          appointmentRow.notes
         );
 
         return appointment;
@@ -95,7 +96,8 @@ export default class AppointmentModel {
           appointmentRow.type,
           new Date(appointmentRow.date),
           appointmentRow.address,
-          appointmentRow.description
+          appointmentRow.description,
+          appointmentRow.notes
         );
 
         appointments.push(appointment);
@@ -135,7 +137,8 @@ export default class AppointmentModel {
           appointmentRow.type,
           new Date(appointmentRow.date),
           appointmentRow.address,
-          appointmentRow.description
+          appointmentRow.description,
+          appointmentRow.notes
         );
 
         appointments.push(appointment);
@@ -155,7 +158,7 @@ export default class AppointmentModel {
 
     const queryUpdateAppointment = `
       UPDATE Appointment 
-      SET client_id = ?, type = ?, date = ?, address = ?, description = ?
+      SET client_id = ?, type = ?, date = ?, address = ?, description = ?, notes = ?
       WHERE id = ?;
     `;
 
@@ -168,13 +171,14 @@ export default class AppointmentModel {
     }
 
     const clientId = (rows[0] as { id: number }).id;
-    // console.log(appointment.getDescription());
+    console.log(appointment.getNotes());
     await this.connection.execute(queryUpdateAppointment, [
       clientId,
       appointment.getType(),
       appointment.getDate(),
       appointment.getAddress(),
       appointment.getDescription(),
+      appointment.getNotes(),
       appointment.getId(),
     ]);
   };
@@ -188,8 +192,8 @@ export default class AppointmentModel {
     `;
 
     const queryInsertAppointment = `
-      INSERT INTO Appointment (client_id, type, date, address, description)
-      VALUES (?, ?, ?, ?, ?);
+      INSERT INTO Appointment (client_id, type, date, address, description, notes)
+      VALUES (?, ?, ?, ?, ?, ?);
     `;
 
     const queryCountAppointments = `
@@ -219,6 +223,7 @@ export default class AppointmentModel {
       appointment.getDate(),
       appointment.getAddress(),
       appointment.getDescription(),
+      appointment.getNotes(),
     ]);
 
     const [countRows]: any = await this.connection.execute(
@@ -233,21 +238,20 @@ export default class AppointmentModel {
     }
   };
 
-  public deleteAppointment = async (id: string): Promise<void> => {
-    const querySelectAppointment = `
+  public deleteAppointment = async (id: string): Promise<boolean> => {
+    try {
+      const querySelectAppointment = `
       SELECT * FROM Appointment WHERE id = ?;
     `;
 
-    const queryInsertDeletedAppointment = `
-      INSERT INTO DeletedAppointment (id, client_id, type, date, address, description)
-      VALUES (?, ?, ?, ?, ?, ?);
+      const queryInsertDeletedAppointment = `
+      INSERT INTO DeletedAppointment (id, client_id, type, date, address, description, notes)
+      VALUES (?, ?, ?, ?, ?, ?, ?);
     `;
 
-    const queryDeleteAppointment = `
+      const queryDeleteAppointment = `
       DELETE FROM Appointment WHERE id = ?;
     `;
-
-    try {
       await this.connection.beginTransaction();
 
       const [rows]: any = await this.connection.execute(
@@ -268,13 +272,17 @@ export default class AppointmentModel {
         appointment.date,
         appointment.address,
         appointment.description,
+        appointment.notes,
       ]);
 
       await this.connection.execute(queryDeleteAppointment, [id]);
 
       await this.connection.commit();
+      return true;
     } catch (error) {
+      console.error('Error al eliminar la cita:', error);
       await this.connection.rollback();
+      return false;
     }
   };
 }

@@ -19,7 +19,6 @@ export default class ShowAppointmentView extends Observer {
     }
     async render() {
         this.showTable();
-        // console.log(this.selector);
     }
     addListeners() {
         window.addEventListener('DOMContentLoaded', () => { });

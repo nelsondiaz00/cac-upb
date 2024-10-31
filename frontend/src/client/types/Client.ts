@@ -1,4 +1,4 @@
-import AbstractPerson from '../../shared/AbstractPerson.js';
+import AbstractPerson from '../../shared/types/AbstractPerson.js';
 
 export default class Client extends AbstractPerson {
   private premium: boolean = false;

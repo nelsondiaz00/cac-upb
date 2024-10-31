@@ -5,15 +5,21 @@ export default class Appointment {
     date;
     address;
     description;
-    _isNull;
-    constructor(id, client, type, date, address, description) {
+    notes;
+    constructor(id, client, type, date, address, description, notes) {
         this.id = id;
         this.client = client;
         this.type = type;
         this.date = date;
         this.address = address;
         this.description = description;
-        this._isNull = false;
+        this.notes = notes;
+    }
+    getNotes() {
+        return this.notes;
+    }
+    setNotes(notes) {
+        this.notes = notes;
     }
     getId() {
         return this.id;
@@ -61,6 +67,6 @@ export default class Appointment {
     // public update(): void {}
     // public cancel(): void {}
     isNull() {
-        return this._isNull;
+        return false;
     }
 }

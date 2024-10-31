@@ -9,9 +9,13 @@ export default class TicketController {
     const { id } = req.params;
     if (id) {
       const ticket = await this.ticketModel.getTicketById(id);
-      res.json(ticket);
+      if (ticket.isNull()) {
+        res.status(404).json(new NullTicket());
+      } else {
+        res.status(200).json(ticket);
+      }
     } else {
-      res.json(NullTicket);
+      res.status(404).json(new NullTicket());
     }
   };
 
@@ -24,13 +28,13 @@ export default class TicketController {
     const { appointmentId } = req.params;
     if (appointmentId) {
       const ticket = await this.ticketModel.createTicket(appointmentId);
-      if (ticket instanceof NullTicket) {
+      if (ticket.isNull()) {
         res.status(409).json({ error: 'Error on appointment' });
       } else {
         res.status(200).json(ticket);
       }
     } else {
-      res.status(404).json(NullTicket);
+      res.status(404).json(new NullTicket());
     }
   };
 
@@ -42,7 +46,22 @@ export default class TicketController {
         ? res.status(200).json({ message: 'Ticket deleted' })
         : res.status(404).json({ message: 'Ticket not found' });
     } else {
-      res.status(404).json(NullTicket);
+      res.status(404).json(new NullTicket());
+    }
+  };
+
+  public deactivateTicket = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
+    const { id } = req.params;
+    if (id) {
+      const founded = await this.ticketModel.deactivateTicket(id);
+      founded
+        ? res.status(200).json({ message: 'Ticket deactivated' })
+        : res.status(404).json({ message: 'Ticket not found' });
+    } else {
+      res.status(404).json(new NullTicket());
     }
   };
 }

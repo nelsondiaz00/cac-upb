@@ -1,9 +1,9 @@
 export default class CreateTicketTemplate {
     static async render() {
-        return ` <header>
-      <h1>CAC-UPB</h1>
-      <h2>GENERAR TICKET</h2>
-    </header>
+        return ` 
+    <div class="name-module">
+      <h3>Generar ticket</h3>
+    </div>
     <form class="w-50 m-auto mt-4 p-4">
       <div class="mb-3">
         <label for="appointment-id" class="form-label"

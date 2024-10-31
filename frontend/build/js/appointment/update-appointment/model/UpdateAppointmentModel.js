@@ -1,6 +1,6 @@
 import Client from '../../../client/types/Client.js';
 import NullClient from '../../../client/types/NullClient.js';
-import Environment from '../../../shared/Environment.js';
+import Environment from '../../../shared/types/Environment.js';
 import Appointment from '../../shared/types/Appointment.js';
 import NullAppointment from '../../shared/types/NullAppointment.js';
 import Subject from '../../shared/types/Subject.js';
@@ -21,7 +21,7 @@ export default class UpdateAppointmentModel extends Subject {
             const responseData = await response.json();
             console.log(responseData);
             const client = new Client(responseData.client.identification, responseData.client.name, responseData.client.lastname, responseData.client.birthday, responseData.client.address, responseData.client.premium);
-            const appointment = new Appointment(responseData.id, client, responseData.type, responseData.date, responseData.address, responseData.description);
+            const appointment = new Appointment(responseData.id, client, responseData.type, responseData.date, responseData.address, responseData.description, '');
             return appointment;
         }
         catch (e) {
@@ -52,6 +52,7 @@ export default class UpdateAppointmentModel extends Subject {
                 date: appointment.getDate(),
                 address: appointment.getAddress(),
                 description: appointment.getDescription(),
+                notes: appointment.getNotes(),
             };
             console.log(info);
             const response = await fetch(await Environment.updateAppointment(), {

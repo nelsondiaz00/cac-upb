@@ -71,7 +71,7 @@ export default class CreateAppointmentView extends Observer {
                 return;
             }
             const combinedDateTime = new Date(`${appointmentDate.value}T${appointmentHour.value}:00`);
-            const newAppointment = new Appointment('0', client, appointmentType.value, combinedDateTime, appointmentAddress.value, appointmentDescription.value);
+            const newAppointment = new Appointment('0', client, appointmentType.value, combinedDateTime, appointmentAddress.value, appointmentDescription.value, '');
             const response = await this.subject.createAppointment(newAppointment);
             if (response) {
                 UtilAppointment.showToast('success', 'Cita creada exitosamente');

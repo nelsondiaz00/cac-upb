@@ -1,10 +1,9 @@
 export default class ShowAppointmentTemplate {
     static async renderAppointments(appointments) {
         return `
-            <header>
-                <h1>CAC-UPB</h1>
-                <h2>CITAS CANCELADAS</h2>
-            </header>
+            <div class="name-module">
+      <h3>Citas canceladas</h3>
+    </div>
             <div class="container">
              <table class="table">
         <thead>

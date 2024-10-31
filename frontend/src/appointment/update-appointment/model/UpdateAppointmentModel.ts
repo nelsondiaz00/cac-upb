@@ -1,6 +1,6 @@
 import Client from '../../../client/types/Client.js';
 import NullClient from '../../../client/types/NullClient.js';
-import Environment from '../../../shared/Environment.js';
+import Environment from '../../../shared/types/Environment.js';
 import Appointment from '../../shared/types/Appointment.js';
 import NullAppointment from '../../shared/types/NullAppointment.js';
 import Subject from '../../shared/types/Subject.js';
@@ -42,7 +42,8 @@ export default class UpdateAppointmentModel extends Subject<UpdateAppointmentVie
         responseData.type,
         responseData.date,
         responseData.address,
-        responseData.description
+        responseData.description,
+        ''
       );
 
       return appointment;
@@ -86,6 +87,7 @@ export default class UpdateAppointmentModel extends Subject<UpdateAppointmentVie
         date: appointment.getDate(),
         address: appointment.getAddress(),
         description: appointment.getDescription(),
+        notes: appointment.getNotes(),
       };
       console.log(info);
       const response = await fetch(await Environment.updateAppointment(), {

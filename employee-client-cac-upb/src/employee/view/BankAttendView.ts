@@ -34,7 +34,7 @@ export default class BankAttendView extends Observer<BankAttendModel> {
     div.className = 'appointment';
     div.innerHTML = await BankAttendTemplate.render();
     this.selector.appendChild(div);
-    this.addHTMLTicketNotifier('A001', false);
+    this.addHTMLTicketNotifier('A006', false);
   }
 
   public async addHTMLTicketNotifier(
@@ -63,9 +63,6 @@ export default class BankAttendView extends Observer<BankAttendModel> {
   }
 
   public addSubmitListeners(): void {
-    // const submitEmployee = document.querySelector(
-    //   '#submit-employee'
-    // ) as HTMLButtonElement;
     const getTicket = document.querySelector(
       '#get-ticket'
     ) as HTMLButtonElement;
@@ -73,7 +70,7 @@ export default class BankAttendView extends Observer<BankAttendModel> {
     getTicket.addEventListener('click', async () => {
       try {
         const ticket = await (this.subject as BankAttendModel).getTicketById(
-          'A001'
+          'A006'
         );
         console.log(ticket);
         const newFormContent = await BankAttendTemplate.renderTicket(ticket);
@@ -82,7 +79,10 @@ export default class BankAttendView extends Observer<BankAttendModel> {
         ) as HTMLFormElement;
         if (mainContainer) {
           mainContainer.innerHTML = newFormContent;
-          this.addHTMLTicketNotifier('A001', true);
+          this.addHTMLTicketNotifier(
+            (this.subject as BankAttendModel).getActualTicket().getTurn(),
+            true
+          );
           this.addSubmitListeners();
           UtilBoostrap.showToast('success', 'Información de ticket cargada');
         } else {
@@ -100,69 +100,67 @@ export default class BankAttendView extends Observer<BankAttendModel> {
       }
     });
 
-    // submitEmployee.addEventListener('click', async () => {
-    //   // const form_user = document.querySelector('#form_user') as HTMLFormElement;
-    //   const user_identification = document.querySelector(
-    //     '#user_identification'
-    //   ) as HTMLInputElement;
-    //   const user_name = document.querySelector(
-    //     '#user_name'
-    //   ) as HTMLInputElement;
-    //   const user_last_name = document.querySelector(
-    //     '#user_last_name'
-    //   ) as HTMLInputElement;
-    //   const user_address = document.querySelector(
-    //     '#user_address'
-    //   ) as HTMLInputElement;
-    //   const user_birthday = document.querySelector(
-    //     '#user_birthday'
-    //   ) as HTMLInputElement;
+    const submitAppointment = document.querySelector(
+      '#submit-appointment'
+    ) as HTMLButtonElement;
 
-    //   const user_email = document.querySelector(
-    //     '#user_email'
-    //   ) as HTMLInputElement;
+    submitAppointment.addEventListener('click', async () => {
+      const appointmentType = document.querySelector(
+        '#appointment_type'
+      ) as HTMLSelectElement;
+      const appointmentDescription = document.querySelector(
+        '#appointment_description'
+      ) as HTMLInputElement;
+      const appointmentDate = document.querySelector(
+        '#appointment_date'
+      ) as HTMLInputElement;
+      const appointmentHour = document.querySelector(
+        '#appointment_hour'
+      ) as HTMLSelectElement;
+      const appointmentAddress = document.querySelector(
+        '#appointment_address'
+      ) as HTMLSelectElement;
 
-    //   const user_password = document.querySelector(
-    //     '#user_password'
-    //   ) as HTMLInputElement;
+      const notesAppointment = document.querySelector(
+        '#notes_appointment'
+      ) as HTMLInputElement;
 
-    //   const user_role = document.querySelector(
-    //     '#user_role'
-    //   ) as HTMLInputElement;
+      const response = await (this.subject as BankAttendModel).finishTurn(
+        notesAppointment.value
+      );
 
-    //   const userRoleValue = user_role.value as RoleEmployee;
+      if (response) {
+        UtilBoostrap.showToast('success', 'Cita terminada exitosamente');
+        appointmentType.value = '';
+        appointmentDescription.value = '';
+        appointmentDate.value = '';
+        appointmentHour.value = '08:00';
+        appointmentAddress.value = '';
+        notesAppointment.value = '';
+        const userIdentification = document.querySelector(
+          '#user_identification'
+        ) as HTMLInputElement;
+        const userName = document.querySelector(
+          '#user_name'
+        ) as HTMLInputElement;
+        const userLastName = document.querySelector(
+          '#user_last_name'
+        ) as HTMLInputElement;
+        const userAddress = document.querySelector(
+          '#user_address'
+        ) as HTMLInputElement;
+        const userBirthday = document.querySelector(
+          '#user_birthday'
+        ) as HTMLInputElement;
 
-    //   if (userRoleValue !== 'ADMIN' && userRoleValue !== 'EMPLOYEE') {
-    //     console.error('Rol de empleado no válido');
-    //     UtilAppointment.showToast('error', 'Creación de usuario fallido');
-    //   } else {
-    //     const employee = new Employee(
-    //       user_identification.value,
-    //       user_name.value,
-    //       user_last_name.value,
-    //       new Date(user_birthday.value),
-    //       user_address.value,
-    //       user_email.value,
-    //       user_password.value,
-    //       userRoleValue
-    //     );
-    //     const response = await (this.subject as BankAttendModel).createEmployee(
-    //       employee
-    //     );
-    //     if (response) {
-    //       UtilAppointment.showToast('success', 'Usuario creado');
-    //       user_identification.value = '';
-    //       user_name.value = '';
-    //       user_last_name.value = '';
-    //       user_address.value = '';
-    //       user_birthday.value = '';
-    //       user_email.value = '';
-    //       user_password.value = '';
-    //       user_role.value = '';
-    //     } else {
-    //       UtilAppointment.showToast('error', 'Creación de usuario fallido');
-    //     }
-    //   }
-    // });
+        userIdentification.value = '';
+        userName.value = '';
+        userLastName.value = '';
+        userAddress.value = '';
+        userBirthday.value = '';
+      } else {
+        UtilBoostrap.showToast('error', 'Actualización de cita fallida');
+      }
+    });
   }
 }

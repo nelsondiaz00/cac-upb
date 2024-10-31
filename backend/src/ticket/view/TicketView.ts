@@ -34,5 +34,15 @@ export default class TicketView {
       '/ticket/deactivate/:id',
       this.ticketController.deactivateTicket.bind(this.ticketController)
     );
+
+    this.router.get(
+      '/queue',
+      this.ticketController.getQueue.bind(this.ticketController)
+    );
+
+    this.router.patch(
+      '/queue/next',
+      this.ticketController.nextTicket.bind(this.ticketController)
+    );
   };
 }

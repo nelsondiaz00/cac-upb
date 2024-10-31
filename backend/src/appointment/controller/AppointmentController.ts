@@ -81,8 +81,14 @@ export default class AppointmentController {
       );
 
       try {
-        await this.appointmentModel.updateAppointment(appointment);
-        res.status(200).json({ message: 'Appointment updated' });
+        const result = await this.appointmentModel.updateAppointment(
+          appointment
+        );
+        if (!result) {
+          res.status(400).json({ error: 'No se pudo actualizar la cita' });
+        } else {
+          res.status(200).json({ message: 'Appointment updated' });
+        }
       } catch (error) {
         // console.error('Error al actualizar la cita:', error);
         res.status(500).json({ error: 'No se pudo actualizar la cita' });

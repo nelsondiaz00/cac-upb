@@ -6,6 +6,7 @@ import Ticket from './ticket/Ticket';
 import ClientAppointmentPublic from './client/client-appointment/ClientAppointmentPublic';
 import ClientTicketPublic from './client/client-ticket/ClientTicketPublic';
 import ClientEmployeePublic from './client/client-employee/ClientEmployeePublic';
+
 const appointmentView = Appointment.createView();
 
 const clientView = Client.createView();

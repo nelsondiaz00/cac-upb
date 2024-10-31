@@ -64,4 +64,30 @@ export default class TicketController {
       res.status(404).json(new NullTicket());
     }
   };
+
+  public getQueue = async (_req: Request, res: Response): Promise<void> => {
+    try {
+      const queue = await this.ticketModel.getQueue();
+      if (queue.length === 0) {
+        res.status(404).json({ message: 'Queue is empty' });
+      } else {
+        res.status(200).json(queue);
+      }
+    } catch (err) {
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
+
+  public nextTicket = async (_req: Request, res: Response): Promise<void> => {
+    try {
+      const ticket = await this.ticketModel.nextTicket();
+      if (ticket.isNull()) {
+        res.status(404).json({ message: 'Ticket not found' });
+      } else {
+        res.status(200).json(ticket);
+      }
+    } catch (err) {
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
 }

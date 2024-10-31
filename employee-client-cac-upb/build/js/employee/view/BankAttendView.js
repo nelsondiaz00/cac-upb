@@ -24,7 +24,7 @@ export default class BankAttendView extends Observer {
         div.className = 'appointment';
         div.innerHTML = await BankAttendTemplate.render();
         this.selector.appendChild(div);
-        this.addHTMLTicketNotifier('A001', false);
+        this.addHTMLTicketNotifier('A006', false);
     }
     async addHTMLTicketNotifier(turn, state) {
         const turnNotifierHTML = await BankAttendTemplate.renderTurnNotifier(turn, state);
@@ -41,19 +41,16 @@ export default class BankAttendView extends Observer {
         });
     }
     addSubmitListeners() {
-        // const submitEmployee = document.querySelector(
-        //   '#submit-employee'
-        // ) as HTMLButtonElement;
         const getTicket = document.querySelector('#get-ticket');
         getTicket.addEventListener('click', async () => {
             try {
-                const ticket = await this.subject.getTicketById('A001');
+                const ticket = await this.subject.getTicketById('A006');
                 console.log(ticket);
                 const newFormContent = await BankAttendTemplate.renderTicket(ticket);
                 const mainContainer = document.querySelector('.main-container');
                 if (mainContainer) {
                     mainContainer.innerHTML = newFormContent;
-                    this.addHTMLTicketNotifier('A001', true);
+                    this.addHTMLTicketNotifier(this.subject.getActualTicket().getTurn(), true);
                     this.addSubmitListeners();
                     UtilBoostrap.showToast('success', 'Información de ticket cargada');
                 }
@@ -66,64 +63,37 @@ export default class BankAttendView extends Observer {
                 UtilBoostrap.showToast('error', 'Error al cargar la información del ticket');
             }
         });
-        // submitEmployee.addEventListener('click', async () => {
-        //   // const form_user = document.querySelector('#form_user') as HTMLFormElement;
-        //   const user_identification = document.querySelector(
-        //     '#user_identification'
-        //   ) as HTMLInputElement;
-        //   const user_name = document.querySelector(
-        //     '#user_name'
-        //   ) as HTMLInputElement;
-        //   const user_last_name = document.querySelector(
-        //     '#user_last_name'
-        //   ) as HTMLInputElement;
-        //   const user_address = document.querySelector(
-        //     '#user_address'
-        //   ) as HTMLInputElement;
-        //   const user_birthday = document.querySelector(
-        //     '#user_birthday'
-        //   ) as HTMLInputElement;
-        //   const user_email = document.querySelector(
-        //     '#user_email'
-        //   ) as HTMLInputElement;
-        //   const user_password = document.querySelector(
-        //     '#user_password'
-        //   ) as HTMLInputElement;
-        //   const user_role = document.querySelector(
-        //     '#user_role'
-        //   ) as HTMLInputElement;
-        //   const userRoleValue = user_role.value as RoleEmployee;
-        //   if (userRoleValue !== 'ADMIN' && userRoleValue !== 'EMPLOYEE') {
-        //     console.error('Rol de empleado no válido');
-        //     UtilAppointment.showToast('error', 'Creación de usuario fallido');
-        //   } else {
-        //     const employee = new Employee(
-        //       user_identification.value,
-        //       user_name.value,
-        //       user_last_name.value,
-        //       new Date(user_birthday.value),
-        //       user_address.value,
-        //       user_email.value,
-        //       user_password.value,
-        //       userRoleValue
-        //     );
-        //     const response = await (this.subject as BankAttendModel).createEmployee(
-        //       employee
-        //     );
-        //     if (response) {
-        //       UtilAppointment.showToast('success', 'Usuario creado');
-        //       user_identification.value = '';
-        //       user_name.value = '';
-        //       user_last_name.value = '';
-        //       user_address.value = '';
-        //       user_birthday.value = '';
-        //       user_email.value = '';
-        //       user_password.value = '';
-        //       user_role.value = '';
-        //     } else {
-        //       UtilAppointment.showToast('error', 'Creación de usuario fallido');
-        //     }
-        //   }
-        // });
+        const submitAppointment = document.querySelector('#submit-appointment');
+        submitAppointment.addEventListener('click', async () => {
+            const appointmentType = document.querySelector('#appointment_type');
+            const appointmentDescription = document.querySelector('#appointment_description');
+            const appointmentDate = document.querySelector('#appointment_date');
+            const appointmentHour = document.querySelector('#appointment_hour');
+            const appointmentAddress = document.querySelector('#appointment_address');
+            const notesAppointment = document.querySelector('#notes_appointment');
+            const response = await this.subject.finishTurn(notesAppointment.value);
+            if (response) {
+                UtilBoostrap.showToast('success', 'Cita terminada exitosamente');
+                appointmentType.value = '';
+                appointmentDescription.value = '';
+                appointmentDate.value = '';
+                appointmentHour.value = '08:00';
+                appointmentAddress.value = '';
+                notesAppointment.value = '';
+                const userIdentification = document.querySelector('#user_identification');
+                const userName = document.querySelector('#user_name');
+                const userLastName = document.querySelector('#user_last_name');
+                const userAddress = document.querySelector('#user_address');
+                const userBirthday = document.querySelector('#user_birthday');
+                userIdentification.value = '';
+                userName.value = '';
+                userLastName.value = '';
+                userAddress.value = '';
+                userBirthday.value = '';
+            }
+            else {
+                UtilBoostrap.showToast('error', 'Actualización de cita fallida');
+            }
+        });
     }
 }

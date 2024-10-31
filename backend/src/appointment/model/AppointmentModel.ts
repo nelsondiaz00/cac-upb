@@ -150,37 +150,44 @@ export default class AppointmentModel {
 
   public updateAppointment = async (
     appointment: Appointment
-  ): Promise<void> => {
-    const queryClientId = `
+  ): Promise<boolean> => {
+    try {
+      const queryClientId = `
       SELECT id FROM client 
       WHERE identification = ?;
     `;
 
-    const queryUpdateAppointment = `
+      const queryUpdateAppointment = `
       UPDATE Appointment 
       SET client_id = ?, type = ?, date = ?, address = ?, description = ?, notes = ?
       WHERE id = ?;
     `;
 
-    const [rows]: any = await this.connection.execute(queryClientId, [
-      appointment.getClient().getIdentification(),
-    ]);
+      const [rows]: any = await this.connection.execute(queryClientId, [
+        appointment.getClient().getIdentification(),
+      ]);
 
-    if ((rows as any[]).length === 0) {
-      throw new Error('Cliente no encontrado');
+      if ((rows as any[]).length === 0) {
+        throw new Error('Cliente no encontrado');
+        return false;
+      }
+
+      const clientId = (rows[0] as { id: number }).id;
+      console.log(appointment.getNotes());
+      await this.connection.execute(queryUpdateAppointment, [
+        clientId,
+        appointment.getType(),
+        appointment.getDate(),
+        appointment.getAddress(),
+        appointment.getDescription(),
+        appointment.getNotes(),
+        appointment.getId(),
+      ]);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
     }
-
-    const clientId = (rows[0] as { id: number }).id;
-    console.log(appointment.getNotes());
-    await this.connection.execute(queryUpdateAppointment, [
-      clientId,
-      appointment.getType(),
-      appointment.getDate(),
-      appointment.getAddress(),
-      appointment.getDescription(),
-      appointment.getNotes(),
-      appointment.getId(),
-    ]);
   };
 
   public createAppointment = async (

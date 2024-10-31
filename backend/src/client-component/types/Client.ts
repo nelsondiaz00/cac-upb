@@ -22,4 +22,8 @@ export default class Client extends AbstractPerson {
   public setPremium(premium: boolean): void {
     this.premium = premium;
   }
+  public getAge(): number {
+    const ageDiff = Date.now() - this.birthday.getTime();
+    return new Date(ageDiff).getUTCFullYear() - 1970;
+  }
 }

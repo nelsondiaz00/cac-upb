@@ -20,6 +20,10 @@ export default class BankAttendModel extends Subject<BankAttendView> {
     this.notifyAllObservers();
   };
 
+  getActualTicket = (): Ticket => {
+    return this.actualTicket;
+  };
+
   public createEmployee = async (employee: Employee): Promise<boolean> => {
     const response = await fetch(await Environment.createEmployee(), {
       method: 'POST',
@@ -47,8 +51,8 @@ export default class BankAttendModel extends Subject<BankAttendView> {
     }
   };
 
-  public async getTicketById(turn: string): Promise<Ticket> {
-    const response = await fetch(await Environment.getTicketById(turn), {
+  public async getTicketById(id: string): Promise<Ticket> {
+    const response = await fetch(await Environment.getTicketById(id), {
       method: 'GET',
     });
 
@@ -95,6 +99,7 @@ export default class BankAttendModel extends Subject<BankAttendView> {
           method: 'PATCH',
         }
       );
+      console.log(responseAppointment.status);
       if (responseAppointment.ok && responseTicket.ok) {
         return true;
         this.actualTicket = new NullTicket();

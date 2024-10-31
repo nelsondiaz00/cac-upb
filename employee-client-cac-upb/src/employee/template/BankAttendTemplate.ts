@@ -157,7 +157,7 @@ export default class BankAttendTemplate {
         <form action="/" method="POST" class="form-employee">         
           <div class="mb-3">
             <label for="appointment_date" class="form-label">Anotaciones</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" style="resize: none;" readonly placeholder="Escribe lo que consideres pertinente en la cita..."></textarea>
+            <textarea class="form-control" id="notes_appointment" rows="10" style="resize: none;" readonly placeholder="Escribe lo que consideres pertinente en la cita..."></textarea>
             
           </div> 
           <div class="mb-3 text-end">
@@ -385,7 +385,7 @@ export default class BankAttendTemplate {
         <form action="/" method="POST" class="form-employee">         
           <div class="mb-3">
             <label for="appointment_date" class="form-label">Anotaciones</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" style="resize: none;" placeholder="Escribe lo que consideres pertinente en la cita..."></textarea>
+            <textarea class="form-control" id="notes_appointment" rows="10" style="resize: none;" placeholder="Escribe lo que consideres pertinente en la cita..."></textarea>
           </div> 
           <div class="mb-3 text-end">
             <input

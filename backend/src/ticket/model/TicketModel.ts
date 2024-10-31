@@ -4,10 +4,10 @@ import NullTicket from '../types/NullTicket';
 import Client from '../../client-component/types/Client';
 import Appointment from '../../appointment/types/Appointment';
 import NullAppointment from '../../appointment/types/NullAppointment';
+import ClientPriorityQueue from '../helper/queueHelper/priorityQueueHelper';
 
 export default class TicketModel {
   private connection!: mysql.Connection;
-
   constructor() {
     this.connectToDB();
   }
@@ -48,7 +48,7 @@ export default class TicketModel {
         if (clientRows.length > 0) {
           const clientRow = clientRows[0];
           const client = new Client(
-            clientRow.id,
+            clientRow.identification,
             clientRow.name,
             clientRow.lastname,
             new Date(clientRow.birthday),
@@ -95,7 +95,7 @@ export default class TicketModel {
         if (clientRows.length > 0) {
           const clientRow = clientRows[0];
           const client = new Client(
-            clientRow.id,
+            clientRow.identification,
             clientRow.name,
             clientRow.lastname,
             new Date(clientRow.birthday),
@@ -111,7 +111,9 @@ export default class TicketModel {
             appointmentRow.description,
             appointmentRow.notes
           );
-          tickets.push(new Ticket(ticketRow.turn, appointment));
+          const ticket = new Ticket(ticketRow.turn, appointment);
+          ticket.setState(ticketRow.state === 1);
+          tickets.push(ticket);
         }
       }
     }
@@ -141,7 +143,7 @@ export default class TicketModel {
       if (clientRows.length > 0) {
         const clientRow = clientRows[0];
         const client = new Client(
-          clientRow.id,
+          clientRow.identification,
           clientRow.name,
           clientRow.lastname,
           new Date(clientRow.birthday),
@@ -211,5 +213,38 @@ export default class TicketModel {
       return true;
     }
     return false;
+  }
+
+  public async getQueue(): Promise<Ticket[]> {
+    try {
+      const priorityQueue = new ClientPriorityQueue();
+      const tickets = await this.getTickets();
+
+      for (const ticket of tickets) {
+        if (ticket.getState()) {
+          priorityQueue.enqueue(ticket);
+        }
+      }
+      return priorityQueue.getAllTickets();
+    } catch (e) {
+      console.log(e);
+      return [];
+    }
+  }
+
+  public async nextTicket(): Promise<Ticket | NullTicket> {
+    try {
+      const queue = await this.getQueue();
+      const ticket = queue.shift();
+      if (ticket) {
+        await this.deactivateTicket(ticket.getTurn());
+        return ticket;
+      } else {
+        return new NullTicket();
+      }
+    } catch (e) {
+      console.log(e);
+      return new NullTicket();
+    }
   }
 }

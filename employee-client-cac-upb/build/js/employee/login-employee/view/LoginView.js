@@ -41,12 +41,16 @@ export default class LoginView extends Observer {
                     console.log('Usuario encontrado');
                     if (user.getPassword() === passwordInput.value) {
                         console.log('Contraseña correcta');
+                        localStorage.setItem('employee', JSON.stringify(user));
                         window.location.href = '/employee/appointments';
                     }
                     else {
                         console.log('Contraseña incorrecta');
                         UtilAppointment.showToast('error', 'Contraseña incorrecta');
                     }
+                }
+                else {
+                    UtilAppointment.showToast('error', 'Dirección de correo no encontrada');
                 }
             });
         }

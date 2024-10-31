@@ -20,13 +20,6 @@ export default class TicketView {
       this.ticketController.getTickets.bind(this.ticketController)
     );
 
-    // this.router.patch(
-    //   '/appointment/update',
-    //   this.appointmentController.updateAppointment.bind(
-    //     this.appointmentController
-    //   )
-    // );
-
     this.router.post(
       '/ticket/create/:appointmentId',
       this.ticketController.createTicket.bind(this.ticketController)
@@ -37,11 +30,9 @@ export default class TicketView {
       this.ticketController.deleteTicket.bind(this.ticketController)
     );
 
-    // this.router.delete(
-    //   '/appointment/delete/:id',
-    //   this.appointmentController.deleteAppointment.bind(
-    //     this.appointmentController
-    //   )
-    // );
+    this.router.patch(
+      '/ticket/deactivate/:id',
+      this.ticketController.deactivateTicket.bind(this.ticketController)
+    );
   };
 }

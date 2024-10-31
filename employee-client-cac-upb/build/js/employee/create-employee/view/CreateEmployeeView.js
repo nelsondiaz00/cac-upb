@@ -1,6 +1,6 @@
 import Observer from '../../shared/types/Observer.js';
 import CreateEmployeeTemplate from '../template/CreateEmployeeTemplate.js';
-import Employee from '../types/Employee.js';
+import Employee from '../../shared/types/Employee.js';
 import UtilAppointment from '../../shared/util/UtilTicket.js';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 export default class CreateEmployeeView extends Observer {

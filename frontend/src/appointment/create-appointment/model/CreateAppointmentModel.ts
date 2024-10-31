@@ -1,6 +1,6 @@
 import Client from '../../../client/types/Client.js';
 import NullClient from '../../../client/types/NullClient.js';
-import Environment from '../../../shared/Environment.js';
+import Environment from '../../../shared/types/Environment.js';
 import Appointment from '../../shared/types/Appointment.js';
 import Subject from '../../shared/types/Subject.js';
 import CreateAppointmentView from '../view/CreateAppointmentView.js';

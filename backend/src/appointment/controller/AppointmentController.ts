@@ -32,7 +32,7 @@ export default class AppointmentController {
     res: Response
   ): Promise<void> => {
     const appointments = await this.appointmentModel.getAppointments();
-    res.json(appointments);
+    res.status(200).json(appointments);
   };
 
   public getAppointmentsDeleted = async (
@@ -40,7 +40,7 @@ export default class AppointmentController {
     res: Response
   ): Promise<void> => {
     const appointments = await this.appointmentModel.getAppointmentsDeleted();
-    res.json(appointments);
+    res.status(200).json(appointments);
   };
 
   public updateAppointment = async (
@@ -76,7 +76,8 @@ export default class AppointmentController {
         appointmentData.type,
         new Date(appointmentData.date),
         appointmentData.address,
-        appointmentData.description
+        appointmentData.description,
+        appointmentData.notes
       );
 
       try {
@@ -122,7 +123,8 @@ export default class AppointmentController {
         appointmentData.type,
         new Date(appointmentData.date),
         appointmentData.address,
-        appointmentData.description
+        appointmentData.description,
+        appointmentData.notes
       );
 
       try {
@@ -142,8 +144,12 @@ export default class AppointmentController {
     const { id } = req.params;
     try {
       if (id) {
-        await this.appointmentModel.deleteAppointment(id);
-        res.json({ message: 'Appointment deleted' });
+        const result = await this.appointmentModel.deleteAppointment(id);
+        if (result) {
+          res.status(200).json({ message: 'Appointment deleted' });
+        } else {
+          res.status(400).json({ error: 'No se pudo eliminar la cita' });
+        }
       } else {
         res.status(400).json({ error: 'ID vacío' });
       }

@@ -98,7 +98,7 @@ export default class UpdateAppointmentView extends Observer {
                 return;
             }
             const combinedDateTime = new Date(`${appointmentDate.value}T${appointmentHour.value}:00`);
-            const newAppointment = new Appointment(idAppointment.value, client, appointmentType.value, combinedDateTime, appointmentAddress.value, appointmentDescription.value);
+            const newAppointment = new Appointment(idAppointment.value, client, appointmentType.value, combinedDateTime, appointmentAddress.value, appointmentDescription.value, '');
             const response = await this.subject.updateAppointment(newAppointment);
             if (response) {
                 UtilAppointment.showToast('success', 'Cita actualizada exitosamente');

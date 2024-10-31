@@ -1,7 +1,8 @@
-import CreateEmployee from '../../employee/create-employee/CreateEmployee.js';
-import Login from '../../employee/login-employee/login.js';
-import ShowAppointment from '../../employee/show-appointment/ShowAppointment.js';
-import ShowCancelAppointment from '../../employee/show-cancel-appointment/ShowCancelAppointment.js';
+import CreateEmployee from '../../admin/create-employee/CreateEmployee.js';
+import Login from '../../admin/login-employee/login.js';
+import ShowAppointment from '../../admin/show-appointment/ShowAppointment.js';
+import ShowCancelAppointment from '../../admin/show-cancel-appointment/ShowCancelAppointment.js';
+import BankAttend from '../../employee/BankAttend.js';
 // import IndexView from '../view/IndexView.js'
 export default class IndexController {
     indexModel;
@@ -9,6 +10,7 @@ export default class IndexController {
     showAppointment;
     showAppointmentCanceled;
     createEmployee;
+    bankAttend;
     login;
     constructor(indexModel, indexView) {
         this.indexModel = indexModel;
@@ -17,6 +19,7 @@ export default class IndexController {
         this.showAppointmentCanceled = ShowCancelAppointment.create();
         this.createEmployee = CreateEmployee.create();
         this.login = Login.create();
+        this.bankAttend = BankAttend.create();
     }
     init = async () => {
         this.indexModel.init();
@@ -39,6 +42,9 @@ export default class IndexController {
             case 'login':
                 this.loadLogin();
                 break;
+            case 'bank-attend':
+                this.loadBankAttend();
+                break;
             default:
                 console.log('Error');
         }
@@ -54,5 +60,8 @@ export default class IndexController {
     };
     loadLogin = async () => {
         this.login.init();
+    };
+    loadBankAttend = async () => {
+        this.bankAttend.init();
     };
 }

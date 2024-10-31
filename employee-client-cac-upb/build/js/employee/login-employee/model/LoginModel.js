@@ -1,4 +1,4 @@
-import Employee from '../../create-employee/types/Employee.js';
+import Employee from '../../shared/types/Employee.js';
 import Environment from '../../shared/types/Environment.js';
 import NullPerson from '../../shared/types/NullPerson.js';
 import Subject from '../../shared/types/Subject.js';

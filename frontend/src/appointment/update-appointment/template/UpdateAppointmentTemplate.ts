@@ -3,10 +3,10 @@ import Appointment from '../../shared/types/Appointment.js';
 
 export default class UpdateAppointmentTemplate {
   public static async render(): Promise<string> {
-    return `<header>
-  <h1>CAC-UPB</h1>
-  <h2>MODIFICAR CITA</h2>
-</header>
+    return `
+    <div class="name-module">
+      <h3>Actualizar cita</h3>
+    </div>
 <div id="update-main-container" class="update-main-container">
   <div class="appointment-id-container">
     <form class="w-50 m-auto mt-4 p-4">

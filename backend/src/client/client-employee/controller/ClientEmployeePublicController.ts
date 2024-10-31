@@ -29,6 +29,9 @@ export default class ClientEmployeePublicController {
         case 'login':
           pageValue = module;
           break;
+        case 'bank-attend':
+          pageValue = module;
+          break;
         default:
           pageValue = 'default';
       }

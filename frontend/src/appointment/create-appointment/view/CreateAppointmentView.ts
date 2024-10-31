@@ -120,7 +120,8 @@ export default class CreateAppointmentView extends Observer<CreateAppointmentMod
         appointmentType.value,
         combinedDateTime,
         appointmentAddress.value,
-        appointmentDescription.value
+        appointmentDescription.value,
+        ''
       );
 
       const response = await (

@@ -1,3 +1,5 @@
+import HeaderTemplate from '../../shared/HeaderTemplate.js';
+
 export default class IndexView {
   private readonly elements: { [name: string]: HTMLElement };
 
@@ -26,6 +28,38 @@ export default class IndexView {
     if (this.elements['main'] !== undefined) {
       this.elements['main'].innerHTML = '';
       this.elements['main'].appendChild(document.createElement(componentName));
+      this.addDropdown();
     }
   };
+
+  public async addDropdown(): Promise<void> {
+    const navigateApp = document.querySelector('.navigate-app');
+    if (navigateApp) {
+      const employeeData = localStorage.getItem('employee');
+      const parsedUser = employeeData ? JSON.parse(employeeData) : null;
+      console.log(parsedUser);
+      if (parsedUser) {
+        let templateString;
+        if (parsedUser.role === 'ADMIN') {
+          templateString = await HeaderTemplate.renderDropDownAdmin(
+            parsedUser.name
+          );
+        } else {
+          templateString = await HeaderTemplate.renderDropDownEmployee(
+            parsedUser.name
+          );
+        }
+        const template = document.createElement('div');
+        template.className = 'item';
+        template.innerHTML = templateString;
+        navigateApp.appendChild(template);
+      } else {
+        const templateString = await HeaderTemplate.renderHeaderButton();
+        const template = document.createElement('div');
+        template.className = 'item';
+        template.innerHTML = templateString;
+        navigateApp.appendChild(template);
+      }
+    }
+  }
 }

@@ -7,7 +7,7 @@ export default class Appointment {
   private date: Date;
   private address: string;
   private description: string;
-  private _isNull: boolean;
+  private notes: string;
 
   constructor(
     id: string,
@@ -15,7 +15,8 @@ export default class Appointment {
     type: string,
     date: Date,
     address: string,
-    description: string
+    description: string,
+    notes: string
   ) {
     this.id = id;
     this.client = client;
@@ -23,7 +24,15 @@ export default class Appointment {
     this.date = date;
     this.address = address;
     this.description = description;
-    this._isNull = false;
+    this.notes = notes;
+  }
+
+  public getNotes(): string {
+    return this.notes;
+  }
+
+  public setNotes(notes: string): void {
+    this.notes = notes;
   }
 
   public getId(): string {
@@ -88,6 +97,6 @@ export default class Appointment {
   // public cancel(): void {}
 
   public isNull(): boolean {
-    return this._isNull;
+    return false;
   }
 }

@@ -27,7 +27,7 @@ export default class TicketModel {
 
   public async getTicketById(id: string): Promise<Ticket | NullTicket> {
     const [ticketRows]: any = await this.connection.execute(
-      'SELECT * FROM Ticket WHERE appointment_id = ?',
+      'SELECT * FROM Ticket WHERE turn = ?',
       [id]
     );
     if (ticketRows.length > 0) {
@@ -35,7 +35,7 @@ export default class TicketModel {
 
       const [appointmentRows]: any = await this.connection.execute(
         'SELECT * FROM Appointment WHERE id = ?',
-        [id]
+        [ticketRow.appointment_id]
       );
 
       if (appointmentRows.length > 0) {
@@ -62,7 +62,8 @@ export default class TicketModel {
             appointmentRow.type,
             new Date(appointmentRow.date),
             appointmentRow.address,
-            appointmentRow.description
+            appointmentRow.description,
+            appointmentRow.notes
           );
           return new Ticket(ticketRow.turn, appointment);
         }
@@ -107,7 +108,8 @@ export default class TicketModel {
             appointmentRow.type,
             new Date(appointmentRow.date),
             appointmentRow.address,
-            appointmentRow.description
+            appointmentRow.description,
+            appointmentRow.notes
           );
           tickets.push(new Ticket(ticketRow.turn, appointment));
         }
@@ -152,7 +154,8 @@ export default class TicketModel {
           appointmentRow.type,
           new Date(appointmentRow.date),
           appointmentRow.address,
-          appointmentRow.description
+          appointmentRow.description,
+          appointmentRow.notes
         );
 
         const [existingTicketRows]: any = await this.connection.execute(
@@ -190,6 +193,21 @@ export default class TicketModel {
     );
     if (ticketRows.length > 0) {
       await this.connection.execute('DELETE FROM Ticket WHERE turn = ?', [id]);
+      return true;
+    }
+    return false;
+  }
+
+  public async deactivateTicket(id: string): Promise<boolean> {
+    const [ticketRows]: any = await this.connection.execute(
+      'SELECT * FROM Ticket WHERE turn = ?',
+      [id]
+    );
+    if (ticketRows.length > 0) {
+      await this.connection.execute(
+        'UPDATE Ticket SET state = 0 WHERE turn = ?',
+        [id]
+      );
       return true;
     }
     return false;

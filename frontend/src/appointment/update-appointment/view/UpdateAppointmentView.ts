@@ -156,7 +156,8 @@ export default class UpdateAppointmentView extends Observer<UpdateAppointmentMod
         appointmentType.value,
         combinedDateTime,
         appointmentAddress.value,
-        appointmentDescription.value
+        appointmentDescription.value,
+        ''
       );
       const response = await (
         this.subject as UpdateAppointmentModel

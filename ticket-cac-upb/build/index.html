@@ -9,6 +9,60 @@
     <title>CAC-UPB</title>
   </head>
   <body>
+    <header>
+      <div class="main-header">
+        <div>
+          <h1>CAC-UPB</h1>
+          <h2>TICKET</h2>
+        </div>
+        <div class="navigate-app">
+          <div class="item">
+            <div class="dropdown">
+              <button
+                class="btn btn-secondary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Citas
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="/appointment/create"
+                    >Crear cita</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/appointment/update"
+                    >Actualizar cita</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="item">
+            <div class="dropdown">
+              <button
+                class="btn btn-secondary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Tickets
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="/ticket/create"
+                    >Crear ticket</a
+                  >
+                </li>
+                <li><a class="dropdown-item" href="#">Ver cola tickets</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
     <ticket></ticket>
     <script src="./js/index.js" type="module"></script>
     <script

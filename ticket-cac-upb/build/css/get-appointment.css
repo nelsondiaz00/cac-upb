@@ -64,3 +64,31 @@ header {
 .name-module {
   padding: 0% 0 3% 3%;
 }
+
+.announcement-queue-container {
+  width: 30%;
+  margin-left: 2%;
+  margin-bottom: 3%;
+}
+
+.queue-container {
+  width: 45%;
+  overflow-y: auto;
+  height: 350px;
+}
+
+.queue-container button {
+  font-size: 1.7rem;
+  color: black;
+}
+
+.queue-main-container {
+  display: flex;
+  flex-direction: row;
+}
+
+@media (max-width: 768px) {
+  .queue-container {
+    height: 450px;
+  }
+}

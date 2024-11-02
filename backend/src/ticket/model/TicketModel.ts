@@ -247,4 +247,15 @@ export default class TicketModel {
       return new NullTicket();
     }
   }
+
+  public async peekQueue(): Promise<Ticket | NullTicket> {
+    try {
+      const queue = await this.getQueue();
+      const ticket = queue[0];
+      return ticket ? ticket : new NullTicket();
+    } catch (e) {
+      console.log(e);
+      return new NullTicket();
+    }
+  }
 }

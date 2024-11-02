@@ -1,4 +1,4 @@
-import NullAppointment from '../../shared/types/NullAppointment';
+import NullAppointment from '../appointment/NullAppointment';
 import Ticket from './Ticket';
 
 export default class NullTicket extends Ticket {

@@ -1,7 +1,8 @@
 import BootstrapTemplateModal from '../template/BootstrapTemplateModal.js';
 import BootstrapTemplateToasts from '../template/BootstrapTemplateToats.js';
+import Ticket from '../types/Ticket.js';
 
-export default class UtilAppointment {
+export default class UtilTicket {
   public static async showToast(
     modalType: string,
     messageModal: string
@@ -35,11 +36,38 @@ export default class UtilAppointment {
   }
 
   public static async showModal(message: string) {
-    const modalHTML = await BootstrapTemplateModal.renderModal(message);
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    let modalElement = document.getElementById('modal-ticket');
 
-    // Muestra el modal utilizando Bootstrap
-    const modalElement = document.getElementById('modal-ticket');
+    if (!modalElement) {
+      const modalHTML = await BootstrapTemplateModal.renderModal(message);
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+      modalElement = document.getElementById('modal-ticket');
+    } else {
+      const newModalHTML = await BootstrapTemplateModal.renderModal(message);
+      modalElement.outerHTML = newModalHTML; // Reemplazar el modal existente
+      modalElement = document.getElementById('modal-ticket');
+    }
+
+    if (modalElement) {
+      const modal = new (window as any).bootstrap.Modal(modalElement);
+      modal.show();
+    }
+  }
+
+  public static async showTicketModal(ticket: Ticket) {
+    let modalElement = document.getElementById('modal-ticket');
+
+    if (!modalElement) {
+      const modalHTML = await BootstrapTemplateModal.renderTicket(ticket);
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+      modalElement = document.getElementById('modal-ticket');
+      console.log('modalElement');
+    } else {
+      const newModalHTML = await BootstrapTemplateModal.renderTicket(ticket);
+      modalElement.outerHTML = newModalHTML;
+      modalElement = document.getElementById('modal-ticket');
+    }
+
     if (modalElement) {
       const modal = new (window as any).bootstrap.Modal(modalElement);
       modal.show();

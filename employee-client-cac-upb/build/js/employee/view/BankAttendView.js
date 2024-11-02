@@ -11,7 +11,6 @@ export default class BankAttendView extends Observer {
         this.selector = document.createElement('div');
     }
     init() {
-        // console.log('appointment view init');
         this.selector = document.querySelector(this.selectorName);
         this.addListeners();
     }
@@ -24,33 +23,29 @@ export default class BankAttendView extends Observer {
         div.className = 'appointment';
         div.innerHTML = await BankAttendTemplate.render();
         this.selector.appendChild(div);
-        this.addHTMLTicketNotifier('A006', false);
+        this.addHTMLTicketNotifier(this.subject.getActualTicket().getTurn(), false);
     }
     async addHTMLTicketNotifier(turn, state) {
         const turnNotifierHTML = await BankAttendTemplate.renderTurnNotifier(turn, state);
         const tempDiv = document.querySelector('.container-attend');
         tempDiv.innerHTML = turnNotifierHTML;
+        this.addAttendListeners();
     }
-    addListeners() {
-        window.addEventListener('DOMContentLoaded', () => {
-            this.addSubmitListeners();
-            // const submitIdentification = document.querySelector(
-            //   '#submit-identification-user'
-            // ) as HTMLButtonElement;
-            // console.log(submitIdentification);
-        });
-    }
-    addSubmitListeners() {
+    addAttendListeners() {
         const getTicket = document.querySelector('#get-ticket');
+        if (!getTicket)
+            return;
         getTicket.addEventListener('click', async () => {
             try {
-                const ticket = await this.subject.getTicketById('A006');
+                console.log('get ticket');
+                const ticket = this.subject.getActualTicket();
                 console.log(ticket);
                 const newFormContent = await BankAttendTemplate.renderTicket(ticket);
                 const mainContainer = document.querySelector('.main-container');
                 if (mainContainer) {
                     mainContainer.innerHTML = newFormContent;
                     this.addHTMLTicketNotifier(this.subject.getActualTicket().getTurn(), true);
+                    this.subject.attendTicket();
                     this.addSubmitListeners();
                     UtilBoostrap.showToast('success', 'Información de ticket cargada');
                 }
@@ -63,6 +58,17 @@ export default class BankAttendView extends Observer {
                 UtilBoostrap.showToast('error', 'Error al cargar la información del ticket');
             }
         });
+    }
+    addListeners() {
+        window.addEventListener('DOMContentLoaded', () => {
+            this.addSubmitListeners();
+            // const submitIdentification = document.querySelector(
+            //   '#submit-identification-user'
+            // ) as HTMLButtonElement;
+            // console.log(submitIdentification);
+        });
+    }
+    addSubmitListeners() {
         const submitAppointment = document.querySelector('#submit-appointment');
         submitAppointment.addEventListener('click', async () => {
             const appointmentType = document.querySelector('#appointment_type');

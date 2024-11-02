@@ -26,15 +26,20 @@ export default class CreateAppointmentModel extends Subject {
         }
     };
     createAppointment = async (appointment) => {
-        console.log(appointment);
+        const appointmentClientData = {
+            client_identification: appointment.getClient().getIdentification(),
+            type: appointment.getType(),
+            date: appointment.getDate().toString(),
+            address: appointment.getAddress(),
+            description: appointment.getDescription(),
+            notes: appointment.getNotes(),
+        };
         const response = await fetch(await Environment.createAppointment(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                appointment,
-            }),
+            body: JSON.stringify(appointmentClientData),
         });
         // const errorData = await response.json();
         if (response.status !== 201) {

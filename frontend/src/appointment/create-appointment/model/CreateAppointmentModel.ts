@@ -1,6 +1,7 @@
 import Client from '../../../client/types/Client.js';
 import NullClient from '../../../client/types/NullClient.js';
 import Environment from '../../../shared/types/Environment.js';
+import IAppointmentClientData from '../../../shared/types/IAppointmentClientData.js';
 import Appointment from '../../shared/types/Appointment.js';
 import Subject from '../../shared/types/Subject.js';
 import CreateAppointmentView from '../view/CreateAppointmentView.js';
@@ -43,15 +44,20 @@ export default class CreateAppointmentModel extends Subject<CreateAppointmentVie
   public createAppointment = async (
     appointment: Appointment
   ): Promise<boolean> => {
-    console.log(appointment);
+    const appointmentClientData: IAppointmentClientData = {
+      client_identification: appointment.getClient().getIdentification(),
+      type: appointment.getType(),
+      date: appointment.getDate().toString(),
+      address: appointment.getAddress(),
+      description: appointment.getDescription(),
+      notes: appointment.getNotes(),
+    };
     const response = await fetch(await Environment.createAppointment(), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        appointment,
-      }),
+      body: JSON.stringify(appointmentClientData),
     });
     // const errorData = await response.json();
     if (response.status !== 201) {

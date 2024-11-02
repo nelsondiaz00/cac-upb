@@ -6,7 +6,7 @@ export default class UpdateAppointmentTemplate {
     </div>
 <div id="update-main-container" class="update-main-container">
   <div class="appointment-id-container">
-    <form class="w-50 m-auto mt-4 p-4">
+    <form class="w-50 m-auto mt-0 p-4">
       <div class="mb-3">
         <label for="user_identification_get" class="form-label"
           >Ingresa el número de cita</label

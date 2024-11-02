@@ -1,4 +1,4 @@
-import Appointment from '../../shared/types/Appointment';
+import Appointment from "../appointment/Appointment";
 
 export default class Ticket {
   private turn: string;

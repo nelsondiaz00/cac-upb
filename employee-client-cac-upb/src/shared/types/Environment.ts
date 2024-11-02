@@ -47,12 +47,17 @@ export default class Environment {
     return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}`;
   };
 
-  public static readonly deactivateTicket = async (
-    turn: string
-  ): Promise<string> => {
+  public static readonly nextTicket = async (): Promise<string> => {
     const env = await fetch('./js/env/env.json');
     const json = await env.json();
     const endpoint = json['ticket/deactivate'] as EndPoint;
-    return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}/${turn}`;
+    return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}`;
+  };
+
+  public static readonly peekQueue = async (): Promise<string> => {
+    const env = await fetch('./js/env/env.json');
+    const json = await env.json();
+    const endpoint = json['ticket/peek'] as EndPoint;
+    return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}`;
   };
 }

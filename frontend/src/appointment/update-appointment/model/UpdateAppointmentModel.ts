@@ -1,6 +1,7 @@
 import Client from '../../../client/types/Client.js';
 import NullClient from '../../../client/types/NullClient.js';
 import Environment from '../../../shared/types/Environment.js';
+import IAppointmentClientData from '../../../shared/types/IAppointmentClientData.js';
 import Appointment from '../../shared/types/Appointment.js';
 import NullAppointment from '../../shared/types/NullAppointment.js';
 import Subject from '../../shared/types/Subject.js';
@@ -80,22 +81,22 @@ export default class UpdateAppointmentModel extends Subject<UpdateAppointmentVie
   ): Promise<boolean> => {
     console.log(appointment);
     try {
-      const info = {
+      const appointmentClientData: IAppointmentClientData = {
         id: appointment.getId(),
         client_identification: appointment.getClient().getIdentification(),
         type: appointment.getType(),
-        date: appointment.getDate(),
+        date: appointment.getDate().toString(),
         address: appointment.getAddress(),
         description: appointment.getDescription(),
         notes: appointment.getNotes(),
       };
-      console.log(info);
+      // console.log(info);
       const response = await fetch(await Environment.updateAppointment(), {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(info),
+        body: JSON.stringify(appointmentClientData),
       });
       const errorData = await response.json();
       console.log(errorData);

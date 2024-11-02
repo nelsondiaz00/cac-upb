@@ -111,9 +111,7 @@ export default class AppointmentController {
       !appointmentData.description
     ) {
       res.status(400).json({ error: 'Datos incompletos para la cita' });
-      // console.log(appointmentData);
     } else {
-      // console.log(appointmentData.appointment);
       const client = new Client(
         appointmentData.client.identification.toString(),
         '',

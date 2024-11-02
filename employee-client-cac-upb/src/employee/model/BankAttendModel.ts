@@ -1,6 +1,5 @@
 import Appointment from '../../shared/types/Appointment.js';
 import Client from '../../shared/types/Client.js';
-import Employee from '../../shared/types/Employee.js';
 import Environment from '../../shared/types/Environment.js';
 import Subject from '../../shared/types/Subject.js';
 import NullTicket from '../types/NullTicket.js';
@@ -17,42 +16,29 @@ export default class BankAttendModel extends Subject<BankAttendView> {
 
   public init = async (): Promise<void> => {
     // console.log('appointment model init');
+    this.startTicketUpdate();
     this.notifyAllObservers();
   };
+
+  public async startTicketUpdate(): Promise<void> {
+    // this.actualTicket = await this.peekQueue();
+    // this.notifyAllObservers();
+    setInterval(async () => {
+      // console.log('updating ticket');
+      if (this.actualTicket.isNull()) {
+        console.log(this.actualTicket);
+        this.actualTicket = await this.peekQueue();
+        this.notifyAllObservers();
+      }
+    }, 250);
+  }
 
   getActualTicket = (): Ticket => {
     return this.actualTicket;
   };
 
-  public createEmployee = async (employee: Employee): Promise<boolean> => {
-    const response = await fetch(await Environment.createEmployee(), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: employee.getName(),
-        lastname: employee.getLastname(),
-        identification: employee.getIdentification(),
-        birthday: employee.getBirthday().toISOString(),
-        address: employee.getAddress(),
-        email: employee.getEmail(),
-        password: employee.getPassword(),
-        role: employee.getRole(),
-      }),
-    });
-    // const errorData = await response.json();
-    if (!response.ok) {
-      console.log('Error creating appointment');
-      return false;
-    } else {
-      console.log('Appointment created');
-      return true;
-    }
-  };
-
-  public async getTicketById(id: string): Promise<Ticket> {
-    const response = await fetch(await Environment.getTicketById(id), {
+  public async peekQueue(): Promise<Ticket> {
+    const response = await fetch(await Environment.peekQueue(), {
       method: 'GET',
     });
 
@@ -62,7 +48,7 @@ export default class BankAttendModel extends Subject<BankAttendView> {
     } else {
       const ticketData = await response.json();
       const ticket = this.mapToClass(ticketData, Ticket);
-      this.actualTicket = ticket;
+      // this.actualTicket = ticket;
       return ticket;
     }
   }
@@ -82,7 +68,6 @@ export default class BankAttendModel extends Subject<BankAttendView> {
         description: this.actualTicket.getAppointment().getDescription(),
         notes: this.actualTicket.getAppointment().getNotes(),
       };
-      console.log(info);
       const responseAppointment = await fetch(
         await Environment.updateAppointment(),
         {
@@ -93,16 +78,30 @@ export default class BankAttendModel extends Subject<BankAttendView> {
           body: JSON.stringify(info),
         }
       );
-      const responseTicket = await fetch(
-        await Environment.deactivateTicket(this.actualTicket.getTurn()),
-        {
-          method: 'PATCH',
-        }
-      );
-      console.log(responseAppointment.status);
-      if (responseAppointment.ok && responseTicket.ok) {
-        return true;
+      if (responseAppointment.ok) {
+        console.log('se volvió nulo');
         this.actualTicket = new NullTicket();
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
+
+  public async attendTicket(): Promise<boolean> {
+    try {
+      const responseTicket = await fetch(await Environment.nextTicket(), {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (responseTicket.ok) {
+        return true;
       } else {
         return false;
       }

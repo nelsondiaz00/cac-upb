@@ -90,4 +90,17 @@ export default class TicketController {
       res.status(500).json({ message: 'Internal Server Error' });
     }
   };
+
+  public peekQueue = async (_req: Request, res: Response): Promise<void> => {
+    try {
+      const ticket = await this.ticketModel.peekQueue();
+      if (ticket.isNull()) {
+        res.status(404).json({ message: 'Queue is empty' });
+      } else {
+        res.status(200).json(ticket);
+      }
+    } catch (err) {
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
 }

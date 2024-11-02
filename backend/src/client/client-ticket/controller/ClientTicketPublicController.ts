@@ -24,6 +24,9 @@ export default class ClientTicketPublicController {
           console.log('update');
           pageValue = module;
           break;
+        case 'queue':
+          pageValue = module;
+          break;
         default:
           pageValue = 'default';
       }

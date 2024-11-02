@@ -1,7 +1,7 @@
 import CreateTicketModel from '../model/CreateTicketModel.js';
 import Observer from '../../shared/types/Observer.js';
 import CreateTicketTemplate from '../template/CreateTicketTemplate.js';
-import UtilAppointment from '../../shared/util/UtilTicket.js';
+import UtilTicket from '../../shared/util/UtilTicket.js';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class CreateTicketView extends Observer<CreateTicketModel> {
@@ -55,10 +55,10 @@ export default class CreateTicketView extends Observer<CreateTicketModel> {
       ).createAppointment(idAppointment);
       if (response != '') {
         console.log(response);
-        UtilAppointment.showModal(response);
+        UtilTicket.showModal(response);
         // UtilAppointment.showToast('success', 'Ticket creado exitosamente');
       } else {
-        UtilAppointment.showToast('error', 'Error en la creación del ticket');
+        UtilTicket.showToast('error', 'Error en la creación del ticket');
       }
     });
   }

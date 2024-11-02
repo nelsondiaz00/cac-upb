@@ -1,6 +1,5 @@
 import NullTicket from '../../types/NullTicket';
 import Ticket from '../../types/Ticket';
-// import NullClient from '../../../client-component/types/NullClient';
 
 export default class ClientPriorityQueue {
   private queue: Ticket[] = [];
@@ -12,6 +11,11 @@ export default class ClientPriorityQueue {
 
   public dequeue(): Ticket {
     const ticket = this.queue.shift();
+    return ticket ? ticket : new NullTicket();
+  }
+
+  public peek(): Ticket {
+    const ticket = this.queue[0];
     return ticket ? ticket : new NullTicket();
   }
 

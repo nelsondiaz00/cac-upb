@@ -44,5 +44,10 @@ export default class TicketView {
       '/queue/next',
       this.ticketController.nextTicket.bind(this.ticketController)
     );
+
+    this.router.get(
+      '/queue/peek',
+      this.ticketController.peekQueue.bind(this.ticketController)
+    );
   };
 }

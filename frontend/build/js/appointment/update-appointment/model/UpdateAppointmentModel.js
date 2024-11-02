@@ -45,22 +45,22 @@ export default class UpdateAppointmentModel extends Subject {
     updateAppointment = async (appointment) => {
         console.log(appointment);
         try {
-            const info = {
+            const appointmentClientData = {
                 id: appointment.getId(),
                 client_identification: appointment.getClient().getIdentification(),
                 type: appointment.getType(),
-                date: appointment.getDate(),
+                date: appointment.getDate().toString(),
                 address: appointment.getAddress(),
                 description: appointment.getDescription(),
                 notes: appointment.getNotes(),
             };
-            console.log(info);
+            // console.log(info);
             const response = await fetch(await Environment.updateAppointment(), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(info),
+                body: JSON.stringify(appointmentClientData),
             });
             const errorData = await response.json();
             console.log(errorData);

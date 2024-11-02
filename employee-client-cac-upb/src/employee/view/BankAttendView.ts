@@ -19,7 +19,6 @@ export default class BankAttendView extends Observer<BankAttendModel> {
   }
 
   public init(): void {
-    // console.log('appointment view init');
     this.selector = document.querySelector(this.selectorName) as HTMLDivElement;
     this.addListeners();
   }
@@ -34,7 +33,10 @@ export default class BankAttendView extends Observer<BankAttendModel> {
     div.className = 'appointment';
     div.innerHTML = await BankAttendTemplate.render();
     this.selector.appendChild(div);
-    this.addHTMLTicketNotifier('A006', false);
+    this.addHTMLTicketNotifier(
+      (this.subject as BankAttendModel).getActualTicket().getTurn(),
+      false
+    );
   }
 
   public async addHTMLTicketNotifier(
@@ -49,29 +51,18 @@ export default class BankAttendView extends Observer<BankAttendModel> {
       '.container-attend'
     ) as HTMLDivElement;
     tempDiv.innerHTML = turnNotifierHTML;
+    this.addAttendListeners();
   }
 
-  public addListeners(): void {
-    window.addEventListener('DOMContentLoaded', () => {
-      this.addSubmitListeners();
-      // const submitIdentification = document.querySelector(
-      //   '#submit-identification-user'
-      // ) as HTMLButtonElement;
-
-      // console.log(submitIdentification);
-    });
-  }
-
-  public addSubmitListeners(): void {
+  public addAttendListeners(): void {
     const getTicket = document.querySelector(
       '#get-ticket'
     ) as HTMLButtonElement;
-
+    if (!getTicket) return;
     getTicket.addEventListener('click', async () => {
       try {
-        const ticket = await (this.subject as BankAttendModel).getTicketById(
-          'A006'
-        );
+        console.log('get ticket');
+        const ticket = (this.subject as BankAttendModel).getActualTicket();
         console.log(ticket);
         const newFormContent = await BankAttendTemplate.renderTicket(ticket);
         const mainContainer = document.querySelector(
@@ -83,6 +74,7 @@ export default class BankAttendView extends Observer<BankAttendModel> {
             (this.subject as BankAttendModel).getActualTicket().getTurn(),
             true
           );
+          (this.subject as BankAttendModel).attendTicket();
           this.addSubmitListeners();
           UtilBoostrap.showToast('success', 'Información de ticket cargada');
         } else {
@@ -99,7 +91,20 @@ export default class BankAttendView extends Observer<BankAttendModel> {
         );
       }
     });
+  }
 
+  public addListeners(): void {
+    window.addEventListener('DOMContentLoaded', () => {
+      this.addSubmitListeners();
+      // const submitIdentification = document.querySelector(
+      //   '#submit-identification-user'
+      // ) as HTMLButtonElement;
+
+      // console.log(submitIdentification);
+    });
+  }
+
+  public addSubmitListeners(): void {
     const submitAppointment = document.querySelector(
       '#submit-appointment'
     ) as HTMLButtonElement;

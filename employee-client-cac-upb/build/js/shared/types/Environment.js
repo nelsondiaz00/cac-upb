@@ -35,10 +35,16 @@ export default class Environment {
         const endpoint = json['appointment/update'];
         return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}`;
     };
-    static deactivateTicket = async (turn) => {
+    static nextTicket = async () => {
         const env = await fetch('./js/env/env.json');
         const json = await env.json();
         const endpoint = json['ticket/deactivate'];
-        return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}/${turn}`;
+        return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}`;
+    };
+    static peekQueue = async () => {
+        const env = await fetch('./js/env/env.json');
+        const json = await env.json();
+        const endpoint = json['ticket/peek'];
+        return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}`;
     };
 }

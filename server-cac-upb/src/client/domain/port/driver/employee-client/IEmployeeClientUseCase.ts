@@ -1,3 +1,3 @@
 export default interface IEmployeeClientUseCase {
-  obtainEmployeeClient(): Promise<boolean>;
+  obtainEmployeeClient(module: string): Promise<boolean>;
 }

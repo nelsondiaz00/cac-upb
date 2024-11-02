@@ -29,6 +29,24 @@ export default class Server {
         )
       )
     );
+    this.app.use(
+      '/ticket',
+      express.static(
+        path.resolve(
+          __dirname,
+          '../../../client/infrastructure/repository/directories/public-ticket'
+        )
+      )
+    );
+    this.app.use(
+      '/employee',
+      express.static(
+        path.resolve(
+          __dirname,
+          '../../../client/infrastructure/repository/directories/public-employee'
+        )
+      )
+    );
   };
 
   public routes = (): void => {

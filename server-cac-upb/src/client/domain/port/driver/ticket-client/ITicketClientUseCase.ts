@@ -1,3 +1,3 @@
 export default interface ITicketClientUseCase {
-  obtainTicketClient(): Promise<boolean>;
+  obtainTicketClient(module: string): Promise<boolean>;
 }

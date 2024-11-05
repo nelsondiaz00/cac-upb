@@ -1,10 +1,8 @@
-import IAppointmentClientRetriverService from '../../domain/port/driver/appointment-client/IAppointmentClientRetriverService';
+import IClientRetriverService from '../../domain/port/driver/client/IAppointmentClientRetriverService';
 import { updateFilePageValue } from '../../util/pageValue';
 import path from 'path';
 
-export default class ClientRetriverService
-  implements IAppointmentClientRetriverService
-{
+export default class ClientRetriverService implements IClientRetriverService {
   constructor() {}
   async retrieveTicketClientByModule(identification: string): Promise<string> {
     const validModules = ['create', 'queue'];

@@ -12,7 +12,7 @@ export default class CreateTicketModel extends Subject<CreateTicketView> {
     this.notifyAllObservers();
   };
 
-  public createAppointment = async (idAppointment: string): Promise<string> => {
+  public createTicket = async (idAppointment: string): Promise<string> => {
     console.log(idAppointment);
     const response = await fetch(
       await Environment.createTicket(idAppointment),
@@ -25,8 +25,8 @@ export default class CreateTicketModel extends Subject<CreateTicketView> {
     );
     // console.log(response.status);
     if (response.ok) {
-      console.log('Appointment created');
       const data = await response.json();
+      console.log(data);
       return data.turn;
     } else {
       console.log('Error creating appointment');

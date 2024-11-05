@@ -46,16 +46,17 @@ export default class CreateTicketView extends Observer<CreateTicketModel> {
     ) as HTMLButtonElement;
     // console.log(ticketSubmit);
     ticketSubmit.addEventListener('click', async () => {
-      const idAppointment = (
-        document.querySelector('#appointment-id') as HTMLInputElement
-      ).value;
+      const idAppointment = document.querySelector(
+        '#appointment-id'
+      ) as HTMLInputElement;
       // console.log(idAppointment);
-      const response = await (
-        this.subject as CreateTicketModel
-      ).createAppointment(idAppointment);
+      const response = await (this.subject as CreateTicketModel).createTicket(
+        idAppointment.value
+      );
       if (response != '') {
         console.log(response);
         UtilTicket.showModal(response);
+        idAppointment.value = '';
         // UtilAppointment.showToast('success', 'Ticket creado exitosamente');
       } else {
         UtilTicket.showToast('error', 'Error en la creación del ticket');

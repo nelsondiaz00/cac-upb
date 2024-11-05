@@ -15,7 +15,7 @@ export default class AppointmentUseCase implements IAppointmentUseCase {
     private readonly appointmentDeleterService: IAppointmentDeleteService,
     private readonly appointmentDeletedRecuperatorService: IAppointmentDeletedRecuperatorService
   ) {}
-  createAppointment(appointment: IAppointmentClientData): Promise<boolean> {
+  createAppointment(appointment: IAppointmentClientData): Promise<string> {
     return this.appointmentCreatorService.create(appointment);
   }
   updateAppointment(appointment: IAppointmentClientData): Promise<boolean> {

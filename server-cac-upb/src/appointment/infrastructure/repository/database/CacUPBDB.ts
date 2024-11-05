@@ -1,6 +1,8 @@
 import mysql from 'mysql2/promise';
 import IAppointmentClientData from '../../../domain/types/IAppointmentClientData';
 import { getDate } from '../../../util/dates';
+import ITicketData from '../../../domain/types/ITicketData';
+import IEmployeeData from '../../../domain/types/IEmployeeData';
 
 export default class CacUPBDB {
   private connection!: mysql.Connection;
@@ -21,6 +23,153 @@ export default class CacUPBDB {
     });
   }
 
+  public async getBankByTicket(turn: string): Promise<any> {
+    const [rows]: any = await this.connection.execute(
+      'SELECT * FROM Bank WHERE current_ticket_turn = ?',
+      [turn]
+    );
+    return rows[0];
+  }
+
+  public async updateBank(
+    turn: string,
+    identificationEmployee: string
+  ): Promise<boolean> {
+    const employeeDb = await this.getEmployeeByIdentification(
+      identificationEmployee
+    );
+    const [result]: any = await this.connection.execute(
+      'UPDATE bank SET current_ticket_turn = ? WHERE employee_id = ?',
+      [turn, employeeDb.id]
+    );
+    return result.affectedRows > 0;
+  }
+  public async getEmployees(): Promise<any> {
+    const [rows]: any = await this.connection.execute('SELECT * FROM Employee');
+    return rows;
+  }
+
+  public async getEmployeeByEmail(email: string): Promise<any> {
+    const [rows]: any = await this.connection.execute(
+      'SELECT * FROM Employee WHERE email = ?',
+      [email]
+    );
+    return rows[0];
+  }
+
+  public async getEmployeeByIdentification(id: string): Promise<any> {
+    const [rows]: any = await this.connection.execute(
+      'SELECT * FROM Employee WHERE identification = ?',
+      [id]
+    );
+    return rows[0];
+  }
+
+  public async createEmployee(employee: IEmployeeData): Promise<boolean> {
+    try {
+      await this.connection.execute(
+        'INSERT INTO Employee (identification, name, lastname, birthday, address, email, password, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [
+          employee.identification,
+          employee.name,
+          employee.lastname,
+          employee.birthday,
+          employee.address,
+          employee.email,
+          employee.password,
+          employee.role,
+        ]
+      );
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
+
+  public async getTickets() {
+    const [ticketRows]: any = await this.connection.execute(
+      'SELECT * FROM Ticket'
+    );
+    return ticketRows;
+  }
+
+  public async getTicketById(turn: string) {
+    const [ticketRows]: any = await this.connection.execute(
+      'SELECT * FROM Ticket WHERE turn = ?',
+      [turn]
+    );
+    return ticketRows[0];
+  }
+
+  public async createTicket(idAppointment: string): Promise<ITicketData> {
+    try {
+      const existingTicketRows: any = await this.getTicketByIdAppointment(
+        idAppointment
+      );
+      // console.log(existingTicketRows);
+      if (existingTicketRows) {
+        console.log('Ticket already exists');
+        throw new Error('Ticket already exists');
+      }
+
+      const newTurn = await this.getTurn();
+
+      await this.connection.execute(
+        'INSERT INTO Ticket (turn, appointment_id) VALUES (?, ?)',
+        [newTurn, idAppointment]
+      );
+
+      return await this.getLastTicketInserted();
+    } catch (e) {
+      console.log(e);
+      throw new Error('Failed to create ticket');
+    }
+  }
+
+  public async deleteTicket(turn: string): Promise<boolean> {
+    try {
+      const queryDeleteTicket = `
+      DELETE FROM Ticket WHERE turn = ?;
+    `;
+      await this.connection.execute(queryDeleteTicket, [turn]);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
+
+  public async deactiveTicket(turn: string): Promise<boolean> {
+    try {
+      const queryUpdateTicket = `
+      UPDATE Ticket 
+      SET state = ?
+      WHERE turn = ?;
+    `;
+      await this.connection.execute(queryUpdateTicket, [0, turn]);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
+
+  public async getQueue() {
+    try {
+      const queryQueueTicket = `
+      SELECT * FROM Ticket WHERE state = 1;
+      `;
+      const [queueTickets]: any = await this.connection.execute(
+        queryQueueTicket
+      );
+      return queueTickets;
+    } catch (e) {
+      console.log(e);
+      return [];
+    }
+  }
+
   public getClientByIdentification = async (identification: string) => {
     const [clientRows]: any = await this.connection.execute(
       'SELECT * FROM Client WHERE identification = ?',
@@ -29,6 +178,7 @@ export default class CacUPBDB {
 
     return clientRows[0];
   };
+
   public getClientById = async (identification: string) => {
     const [clientRows]: any = await this.connection.execute(
       'SELECT * FROM Client WHERE id = ?',
@@ -61,7 +211,7 @@ export default class CacUPBDB {
 
   public createAppointment = async (
     appointment: IAppointmentClientData
-  ): Promise<boolean> => {
+  ): Promise<string> => {
     try {
       const queryInsertAppointment = `
       INSERT INTO Appointment (client_id, type, date, address, description, notes)
@@ -85,10 +235,11 @@ export default class CacUPBDB {
       if (appointmentCount >= 8) {
         await this.updatePremiumStatus(clientId);
       }
-      return true;
+      const lastAppointment = await this.getLastAppointmentInserted();
+      return lastAppointment.id;
     } catch (e) {
       console.log(e);
-      return false;
+      return '';
     }
   };
 
@@ -118,6 +269,45 @@ export default class CacUPBDB {
     }
   };
 
+  public updateAppointment = async (
+    appointment: IAppointmentClientData
+  ): Promise<boolean> => {
+    const queryUpdateAppointment = `
+      UPDATE Appointment 
+      SET client_id = ?, type = ?, date = ?, address = ?, description = ?, notes = ?
+      WHERE id = ?;
+    `;
+
+    const clientId = await this.getIdClient(appointment.client_identification);
+    await this.connection.execute(queryUpdateAppointment, [
+      clientId,
+      appointment.type,
+      getDate(appointment.date),
+      appointment.address,
+      appointment.description,
+      appointment.notes,
+      appointment.id,
+    ]);
+
+    return true;
+  };
+
+  private async getLastAppointmentInserted() {
+    const [rows]: any = await this.connection.execute(
+      'SELECT * FROM Appointment WHERE id = LAST_INSERT_ID()'
+    );
+
+    return rows[0];
+  }
+
+  private async getLastTicketInserted() {
+    const [rows]: any = await this.connection.execute(
+      'SELECT * FROM Ticket WHERE id = LAST_INSERT_ID()'
+    );
+
+    return rows[0];
+  }
+
   private createDeletedAppointment = async (id: string): Promise<boolean> => {
     try {
       const queryInsertDeletedAppointment = `
@@ -144,28 +334,23 @@ export default class CacUPBDB {
     }
   };
 
-  public updateAppointment = async (
-    appointment: IAppointmentClientData
-  ): Promise<boolean> => {
-    const queryUpdateAppointment = `
-      UPDATE Appointment 
-      SET client_id = ?, type = ?, date = ?, address = ?, description = ?, notes = ?
-      WHERE id = ?;
-    `;
+  private async getTicketByIdAppointment(id: string) {
+    const [ticketRows]: any = await this.connection.execute(
+      'SELECT * FROM Ticket WHERE appointment_id = ?',
+      [id]
+    );
+    return ticketRows[0];
+  }
 
-    const clientId = await this.getIdClient(appointment.client_identification);
-    await this.connection.execute(queryUpdateAppointment, [
-      clientId,
-      appointment.type,
-      getDate(appointment.date),
-      appointment.address,
-      appointment.description,
-      appointment.notes,
-      appointment.id,
-    ]);
+  private async getTurn(): Promise<string> {
+    const [lastTurnRow]: any = await this.connection.execute(
+      'SELECT turn FROM Ticket ORDER BY id DESC LIMIT 1'
+    );
+    let lastTurn = lastTurnRow[0]?.turn || 'A000';
 
-    return true;
-  };
+    let turnNumber = parseInt(lastTurn.slice(1)) + 1;
+    return `A${turnNumber.toString().padStart(3, '0')}`;
+  }
 
   private getCountAppointmentsPerClient = async (
     clientId: number

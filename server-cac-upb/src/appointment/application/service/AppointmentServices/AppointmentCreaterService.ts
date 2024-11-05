@@ -6,7 +6,7 @@ export default class AppointmentCreateService
   implements IAppointmentCreateService
 {
   constructor(private readonly cacUPBRepository: ICacUPBRepository) {}
-  create(appointment: IAppointmentClientData): Promise<boolean> {
+  create(appointment: IAppointmentClientData): Promise<string> {
     return this.cacUPBRepository.saveAppointment(appointment);
   }
 }

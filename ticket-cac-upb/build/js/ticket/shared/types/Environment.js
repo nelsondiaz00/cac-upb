@@ -11,4 +11,10 @@ export default class Environment {
         const endpoint = json['ticket/queue'];
         return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}`;
     };
+    static getBankByTicket = async (ticketTurn) => {
+        const env = await fetch('./js/env/env.json');
+        const json = await env.json();
+        const endpoint = json['bank/:ticket'];
+        return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}/${ticketTurn}`;
+    };
 }

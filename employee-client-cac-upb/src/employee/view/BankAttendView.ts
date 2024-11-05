@@ -69,14 +69,20 @@ export default class BankAttendView extends Observer<BankAttendModel> {
           '.main-container'
         ) as HTMLFormElement;
         if (mainContainer) {
-          mainContainer.innerHTML = newFormContent;
-          this.addHTMLTicketNotifier(
-            (this.subject as BankAttendModel).getActualTicket().getTurn(),
-            true
-          );
-          (this.subject as BankAttendModel).attendTicket();
-          this.addSubmitListeners();
-          UtilBoostrap.showToast('success', 'Información de ticket cargada');
+          const result = await (
+            this.subject as BankAttendModel
+          ).nextQueueTicket();
+          if (!result) {
+            UtilBoostrap.showToast('error', 'Error en proceso de atención');
+          } else {
+            mainContainer.innerHTML = newFormContent;
+            this.addHTMLTicketNotifier(
+              (this.subject as BankAttendModel).getActualTicket().getTurn(),
+              true
+            );
+            this.addSubmitListeners();
+            UtilBoostrap.showToast('success', 'Información de ticket cargada');
+          }
         } else {
           UtilBoostrap.showToast(
             'error',

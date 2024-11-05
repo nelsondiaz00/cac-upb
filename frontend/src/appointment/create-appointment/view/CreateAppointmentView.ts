@@ -128,8 +128,9 @@ export default class CreateAppointmentView extends Observer<CreateAppointmentMod
         this.subject as CreateAppointmentModel
       ).createAppointment(newAppointment);
 
-      if (response) {
+      if (response !== '') {
         UtilAppointment.showToast('success', 'Cita creada exitosamente');
+        UtilAppointment.showModal(response);
         appointmentType.value = '';
         appointmentDescription.value = '';
         appointmentDate.value = '';

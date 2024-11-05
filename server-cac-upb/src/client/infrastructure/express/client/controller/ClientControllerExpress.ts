@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import IAppointmentClientUseCase from '../../../../domain/port/driver/appointment-client/IAppointmentClientUseCase';
+import IClientUseCase from '../../../../domain/port/driver/client/IAppointmentClientUseCase';
 import IClientControllerExpress from '../../../../domain/port/driver/client/IClientControllerExpress';
 export default class ClientControllerExpress
   implements IClientControllerExpress
 {
-  constructor(private readonly clientUseCase: IAppointmentClientUseCase) {}
+  constructor(private readonly clientUseCase: IClientUseCase) {}
 
   async indexAppointmentModule(req: Request, res: Response): Promise<void> {
     await this.handleClientRequest(

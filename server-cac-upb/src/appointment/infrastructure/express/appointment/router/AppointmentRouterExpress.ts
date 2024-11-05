@@ -48,7 +48,7 @@ export default class AppointmentRouterExpress
   getAppointmentsDeleted(): void {
     this.router.get(
       '/appointments/appointments-deleted',
-      this.appointmentController.deleteAppointment.bind(
+      this.appointmentController.readAppointmentsDeleted.bind(
         this.appointmentController
       )
     );

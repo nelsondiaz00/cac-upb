@@ -1,11 +1,9 @@
-import IAppointmentClientRetriverService from '../../domain/port/driver/appointment-client/IAppointmentClientRetriverService';
-import IAppointmentClientUseCase from '../../domain/port/driver/appointment-client/IAppointmentClientUseCase';
+import IClientRetriverService from '../../domain/port/driver/client/IAppointmentClientRetriverService';
+import IClientUseCase from '../../domain/port/driver/client/IAppointmentClientUseCase';
 
-export default class AppointmentClientUseCase
-  implements IAppointmentClientUseCase
-{
+export default class ClientUseCase implements IClientUseCase {
   constructor(
-    private readonly appointmentCreateService: IAppointmentClientRetriverService
+    private readonly appointmentCreateService: IClientRetriverService
   ) {
     this.appointmentCreateService = appointmentCreateService;
   }

@@ -1,4 +1,4 @@
-import ClientRecuperatorService from '../../../application/service/PersonServices/ClientRecuperatorService';
+import ClientRecuperatorService from '../../../application/service/ClientServices/ClientRecuperatorService';
 import IClientRecuperatorService from '../../../domain/port/driver/client/IClientRecuperatorService';
 import CacUPBRepositoryFactory from '../repository/CacUPBRepositoryFactory';
 

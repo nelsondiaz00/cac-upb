@@ -43,11 +43,16 @@ export default class BankAttendView extends Observer {
                 const newFormContent = await BankAttendTemplate.renderTicket(ticket);
                 const mainContainer = document.querySelector('.main-container');
                 if (mainContainer) {
-                    mainContainer.innerHTML = newFormContent;
-                    this.addHTMLTicketNotifier(this.subject.getActualTicket().getTurn(), true);
-                    this.subject.attendTicket();
-                    this.addSubmitListeners();
-                    UtilBoostrap.showToast('success', 'Información de ticket cargada');
+                    const result = await this.subject.nextQueueTicket();
+                    if (!result) {
+                        UtilBoostrap.showToast('error', 'Error en proceso de atención');
+                    }
+                    else {
+                        mainContainer.innerHTML = newFormContent;
+                        this.addHTMLTicketNotifier(this.subject.getActualTicket().getTurn(), true);
+                        this.addSubmitListeners();
+                        UtilBoostrap.showToast('success', 'Información de ticket cargada');
+                    }
                 }
                 else {
                     UtilBoostrap.showToast('error', 'Error al cargar la información del ticket');

@@ -43,7 +43,7 @@ export default class CreateAppointmentModel extends Subject<CreateAppointmentVie
 
   public createAppointment = async (
     appointment: Appointment
-  ): Promise<boolean> => {
+  ): Promise<string> => {
     const appointmentClientData: IAppointmentClientData = {
       client_identification: appointment.getClient().getIdentification(),
       type: appointment.getType(),
@@ -62,10 +62,12 @@ export default class CreateAppointmentModel extends Subject<CreateAppointmentVie
     // const errorData = await response.json();
     if (response.status !== 201) {
       console.log('Error creating appointment');
-      return false;
+      return '';
     } else {
+      const data = await response.json();
+      return data.message;
       console.log('Appointment created');
-      return true;
+      return data;
     }
   };
 }

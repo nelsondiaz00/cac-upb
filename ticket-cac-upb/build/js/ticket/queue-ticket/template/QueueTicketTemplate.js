@@ -11,6 +11,19 @@ export default class QueueTicketTemplate {
         `)
                 .join('');
         const firstTicketTurn = tickets.length > 0 ? tickets[0]?.getTurn() : 'N/A';
+        // const bankContent = bank
+        //   ? `
+        //   <div class="queue-component p-3 text-bg-warning rounded-3">
+        //       <h3 style="text-align: center; margin: 0;">Turno en cola: ${firstTicketTurn}</h3>
+        //       <h3 style="text-align: center; margin: 0;">Banco: Espere</h3>
+        //     </div>
+        // `
+        //   : `
+        //     <div class="queue-component p-3 text-bg-warning rounded-3">
+        //       <h3 style="text-align: center; margin: 0;">Turno en cola: ${firstTicketTurn}</h3>
+        //       <h3 style="text-align: center; margin: 0;">Banco: Espere</h3>
+        //     </div>
+        //       `;
         const html = ` 
     <div class="name-module">
       <h3>COLA DE TICKETS</h3>
@@ -18,7 +31,7 @@ export default class QueueTicketTemplate {
     
     <div class="queue-main-container">
       <div class="announcement-queue-container" style="margin-right: 5%;">
-        <div class="queue-component p-3 text-bg-warning rounded-3">
+        <div class="queue-component p-3 text-bg-warning rounded-3 mb-3">
           <h3 style="text-align: center; margin: 0;">Turno en cola: ${firstTicketTurn}</h3>
           <h3 style="text-align: center; margin: 0;">Banco: Espere</h3>
         </div>
@@ -45,5 +58,12 @@ export default class QueueTicketTemplate {
             });
         }, 0);
         return html;
+    }
+    static async renderBankAnnouncement(bank) {
+        return `
+    <div class="queue-component p-3 text-bg-warning rounded-3">
+        <h3 style="text-align: center; margin: 0;">Turno atendido: ${bank.getTicket.getTurn()}</h3>
+        <h3 style="text-align: center; margin: 0;">Banco: ${bank.getName}</h3>
+      </div>`;
     }
 }

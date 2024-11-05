@@ -8,7 +8,7 @@ export default class CreateTicketModel extends Subject {
         // console.log('appointment model init');
         this.notifyAllObservers();
     };
-    createAppointment = async (idAppointment) => {
+    createTicket = async (idAppointment) => {
         console.log(idAppointment);
         const response = await fetch(await Environment.createTicket(idAppointment), {
             method: 'POST',
@@ -18,8 +18,8 @@ export default class CreateTicketModel extends Subject {
         });
         // console.log(response.status);
         if (response.ok) {
-            console.log('Appointment created');
             const data = await response.json();
+            console.log(data);
             return data.turn;
         }
         else {

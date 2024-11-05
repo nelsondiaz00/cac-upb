@@ -13,7 +13,7 @@ export default class AppointmentControllerExpress
         appointmentData
       );
       if (result) {
-        res.status(201).json({ message: 'Appointment created' });
+        res.status(201).json({ message: result });
       } else {
         res.status(400).json({ message: 'Appointment could not be created' });
       }

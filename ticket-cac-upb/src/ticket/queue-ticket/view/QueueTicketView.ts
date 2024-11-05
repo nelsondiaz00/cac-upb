@@ -16,7 +16,7 @@ export default class QueueTicketView extends Observer<QueueTicketModel> {
     // console.log('appointment view init');
     this.selector = document.querySelector(this.selectorName) as HTMLDivElement;
     // console.log(this.selector);
-    this.addListeners();
+    // this.addListeners();
   }
 
   public override update(): void {
@@ -24,42 +24,45 @@ export default class QueueTicketView extends Observer<QueueTicketModel> {
   }
 
   public async render(): Promise<void> {
-    // console.log('rendering create ticket');
     this.selector.innerHTML = '';
     const div = document.createElement('div');
     div.className = 'ticket';
+    const bank = await (this.subject as QueueTicketModel).getBankByTicket();
     const tickets = await (this.subject as QueueTicketModel).getQueueTickets();
+
+    //  console.log('banco', bank);
     div.innerHTML = await QueueTicketTemplate.render(tickets);
     this.selector.appendChild(div);
-    // console.log(this.selector);
+
+    if (!bank.isNull()) {
+      const bankTemplate = await QueueTicketTemplate.renderBankAnnouncement(
+        bank
+      );
+      const announcementContainer = document.querySelector(
+        '.announcement-queue-container'
+      ) as HTMLElement;
+      console.log('announcementContainer', announcementContainer);
+      if (announcementContainer) {
+        const announcement = document.createElement('div');
+        announcement.className =
+          'queue-component p-3 text-bg-warning rounded-3 mb-3';
+        console.log('añadiendo bank');
+        announcement.innerHTML = bankTemplate;
+        announcementContainer.appendChild(announcement);
+        setTimeout(() => {
+          announcement.remove();
+        }, 10000);
+      }
+    }
   }
 
-  public addListeners(): void {
-    window.addEventListener('DOMContentLoaded', () => {
-      this.addSubmitListeners();
-    });
-  }
+  // public addListeners(): void {
+  //   window.addEventListener('DOMContentLoaded', () => {
+  //     this.addSubmitListeners();
+  //   });
+  // }
 
-  public addSubmitListeners(): void {
-    // const ticketSubmit = document.querySelector(
-    //   '#submit-appointment-id'
-    // ) as HTMLButtonElement;
-    // // console.log(ticketSubmit);
-    // ticketSubmit.addEventListener('click', async () => {
-    //   const ticket = (
-    //     document.querySelector('#appointment-id') as HTMLInputElement
-    //   ).value;
-    //   console.log(idAppointment);
-    //   const response = await (
-    //     this.subject as QueueTicketModel
-    //   ).createAppointment(idAppointment);
-    //   if (response != '') {
-    //     console.log(response);
-    //     UtilAppointment.showModal(response);
-    //     // UtilAppointment.showToast('success', 'Ticket creado exitosamente');
-    //   } else {
-    //     UtilAppointment.showToast('error', 'Error en la creación del ticket');
-    //   }
-    // });
-  }
+  // public addSubmitListeners(): void {
+
+  // }
 }

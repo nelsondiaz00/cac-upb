@@ -8,10 +8,11 @@ import BankAttendView from '../view/BankAttendView.js';
 
 export default class BankAttendModel extends Subject<BankAttendView> {
   private actualTicket: Ticket;
-
+  private inAttend: boolean;
   constructor() {
     super();
     this.actualTicket = new NullTicket();
+    this.inAttend = false;
   }
 
   public init = async (): Promise<void> => {
@@ -21,13 +22,13 @@ export default class BankAttendModel extends Subject<BankAttendView> {
   };
 
   public async startTicketUpdate(): Promise<void> {
-    // this.actualTicket = await this.peekQueue();
-    // this.notifyAllObservers();
     setInterval(async () => {
-      // console.log('updating ticket');
-      if (this.actualTicket.isNull()) {
-        console.log(this.actualTicket);
-        this.actualTicket = await this.peekQueue();
+      const nextTicket = await this.peekQueue();
+      if (
+        this.actualTicket.isNull() ||
+        (nextTicket.getTurn() !== this.actualTicket.getTurn() && !this.inAttend)
+      ) {
+        this.actualTicket = nextTicket;
         this.notifyAllObservers();
       }
     }, 250);
@@ -80,6 +81,7 @@ export default class BankAttendModel extends Subject<BankAttendView> {
       );
       if (responseAppointment.ok) {
         console.log('se volvió nulo');
+        this.inAttend = false;
         this.actualTicket = new NullTicket();
         return true;
       } else {
@@ -91,16 +93,51 @@ export default class BankAttendModel extends Subject<BankAttendView> {
     }
   }
 
-  public async attendTicket(): Promise<boolean> {
+  public async nextQueueTicket(): Promise<boolean> {
     try {
-      const responseTicket = await fetch(await Environment.nextTicket(), {
+      const result = await this.updateBank();
+      console.log('result: ', result);
+      if (!result) {
+        console.log('Error updating bank');
+        return false;
+      } else {
+        const responseTicket = await fetch(await Environment.nextTicket(), {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (responseTicket.ok) {
+          this.inAttend = true;
+          return true;
+        } else {
+          return false;
+        }
+      }
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
+
+  public async updateBank(): Promise<boolean> {
+    try {
+      const employeeData = localStorage.getItem('employee');
+      const parsedUser = employeeData ? JSON.parse(employeeData) : null;
+      const data = {
+        idTicket: this.actualTicket.getTurn(),
+        idEmployee: parsedUser.identification,
+      };
+      console.log(data);
+      const responseBank = await fetch(await Environment.updateBank(), {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(data),
       });
 
-      if (responseTicket.ok) {
+      if (responseBank.ok) {
         return true;
       } else {
         return false;

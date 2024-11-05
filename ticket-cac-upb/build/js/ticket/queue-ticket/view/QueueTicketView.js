@@ -12,46 +12,35 @@ export default class QueueTicketView extends Observer {
         // console.log('appointment view init');
         this.selector = document.querySelector(this.selectorName);
         // console.log(this.selector);
-        this.addListeners();
+        // this.addListeners();
     }
     update() {
         this.render();
     }
     async render() {
-        // console.log('rendering create ticket');
         this.selector.innerHTML = '';
         const div = document.createElement('div');
         div.className = 'ticket';
+        const bank = await this.subject.getBankByTicket();
         const tickets = await this.subject.getQueueTickets();
+        //  console.log('banco', bank);
         div.innerHTML = await QueueTicketTemplate.render(tickets);
         this.selector.appendChild(div);
-        // console.log(this.selector);
-    }
-    addListeners() {
-        window.addEventListener('DOMContentLoaded', () => {
-            this.addSubmitListeners();
-        });
-    }
-    addSubmitListeners() {
-        // const ticketSubmit = document.querySelector(
-        //   '#submit-appointment-id'
-        // ) as HTMLButtonElement;
-        // // console.log(ticketSubmit);
-        // ticketSubmit.addEventListener('click', async () => {
-        //   const ticket = (
-        //     document.querySelector('#appointment-id') as HTMLInputElement
-        //   ).value;
-        //   console.log(idAppointment);
-        //   const response = await (
-        //     this.subject as QueueTicketModel
-        //   ).createAppointment(idAppointment);
-        //   if (response != '') {
-        //     console.log(response);
-        //     UtilAppointment.showModal(response);
-        //     // UtilAppointment.showToast('success', 'Ticket creado exitosamente');
-        //   } else {
-        //     UtilAppointment.showToast('error', 'Error en la creación del ticket');
-        //   }
-        // });
+        if (!bank.isNull()) {
+            const bankTemplate = await QueueTicketTemplate.renderBankAnnouncement(bank);
+            const announcementContainer = document.querySelector('.announcement-queue-container');
+            console.log('announcementContainer', announcementContainer);
+            if (announcementContainer) {
+                const announcement = document.createElement('div');
+                announcement.className =
+                    'queue-component p-3 text-bg-warning rounded-3 mb-3';
+                console.log('añadiendo bank');
+                announcement.innerHTML = bankTemplate;
+                announcementContainer.appendChild(announcement);
+                setTimeout(() => {
+                    announcement.remove();
+                }, 10000);
+            }
+        }
     }
 }

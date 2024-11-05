@@ -1,3 +1,4 @@
+import BootstrapTemplateModal from '../template/BootstrapTemplateModal.js';
 import BootstrapTemplateToasts from '../template/BootstrapTemplateToasts.js';
 
 export default class UtilAppointment {
@@ -30,6 +31,25 @@ export default class UtilAppointment {
       toast.show();
     } else {
       console.error('Toast element not found');
+    }
+  }
+
+  public static async showModal(message: string) {
+    let modalElement = document.getElementById('modal-ticket');
+
+    if (!modalElement) {
+      const modalHTML = await BootstrapTemplateModal.renderModal(message);
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+      modalElement = document.getElementById('modal-ticket');
+    } else {
+      const newModalHTML = await BootstrapTemplateModal.renderModal(message);
+      modalElement.outerHTML = newModalHTML; // Reemplazar el modal existente
+      modalElement = document.getElementById('modal-ticket');
+    }
+
+    if (modalElement) {
+      const modal = new (window as any).bootstrap.Modal(modalElement);
+      modal.show();
     }
   }
 }

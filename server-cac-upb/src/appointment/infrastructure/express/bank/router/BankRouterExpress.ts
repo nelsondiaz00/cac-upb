@@ -11,9 +11,19 @@ export default class BankRouterExpress
     this.routes();
   }
   public routes = (): void => {
+    this.getBankByEmployeeIdentificacion();
     this.getBankByTicket();
     this.updateBank();
   };
+  getBankByEmployeeIdentificacion(): void {
+    this.router.get(
+      '/banks/bank/employee/:idEmployee',
+      this.bankControllerExpress.readBankByEmployeeIdentificacion.bind(
+        this.bankControllerExpress
+      )
+    );
+  }
+
   getBankByTicket(): void {
     this.router.get(
       '/banks/bank/:idTicket',

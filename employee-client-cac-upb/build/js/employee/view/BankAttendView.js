@@ -1,8 +1,6 @@
 import BankAttendTemplate from '../template/BankAttendTemplate.js';
 import Observer from '../../shared/types/Observer.js';
-// import BootstrapTemplateToasts from '../../admin/shared/template/BootstrapTemplateToats.js';
 import UtilBoostrap from '../../admin/shared/util/UtilBootstrap.js';
-// import 'bootstrap/dist/css/bootstrap.min.css';
 export default class BankAttendView extends Observer {
     selector;
     selectorName = 'employee';
@@ -10,17 +8,20 @@ export default class BankAttendView extends Observer {
         super(subject);
         this.selector = document.createElement('div');
     }
-    init() {
+    async init() {
         this.selector = document.querySelector(this.selectorName);
         this.addListeners();
+        const bank = await this.subject.getBank();
+        localStorage.setItem('bank', JSON.stringify(bank));
     }
-    update() {
-        this.render();
+    async update() {
+        await this.render();
     }
     async render() {
         this.selector.innerHTML = '';
         const div = document.createElement('div');
         div.className = 'appointment';
+        // const bank = await (this.subject as BankAttendModel).getBank();
         div.innerHTML = await BankAttendTemplate.render();
         this.selector.appendChild(div);
         this.addHTMLTicketNotifier(this.subject.getActualTicket().getTurn(), false);

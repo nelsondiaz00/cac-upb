@@ -16,9 +16,6 @@ export default class HeaderTemplate {
                   <a class="dropdown-item" href="/employee/appointments">Ver citas</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="/employee/appointments-canceled">Ver citas canceladas</a>
-                </li>
-                <li>
                   <a class="dropdown-item" href="/employee/create">Crear usuarios</a>
                 </li>
                 <li><hr class="dropdown-divider"></li>
@@ -46,7 +43,6 @@ export default class HeaderTemplate {
   public static async renderDropDownEmployee(
     nameUser: string
   ): Promise<string> {
-    // HTML del menú desplegable
     const dropdownHtml = `
             <div class="dropdown">
               <button
@@ -69,7 +65,6 @@ export default class HeaderTemplate {
             </div>
     `;
 
-    // Añadimos el HTML al DOM y agregamos el event listener
     setTimeout(() => {
       const logoutButton = document.getElementById('logout');
       if (logoutButton) {

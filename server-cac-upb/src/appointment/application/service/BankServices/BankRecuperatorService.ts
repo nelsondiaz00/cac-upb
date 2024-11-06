@@ -10,6 +10,25 @@ export default class BankRecuperatorService implements IBankRecuperatorService {
     private readonly employeeRecuperatorService: IEmployeeRecuperatorService,
     private readonly ticketRecuperatorService: ITicketRecuperatorService
   ) {}
+  async retrieveBankByEmployeeIdentification(
+    identification: string
+  ): Promise<Bank> {
+    const bankBD = await this.CacUPBRepository.findBankByIdEmployee(
+      identification
+    );
+    const bank = new Bank(
+      bankBD.id,
+      bankBD.name,
+      bankBD.address,
+      await this.employeeRecuperatorService.retrieveEmployeeById(
+        bankBD.employee_id
+      )
+    );
+    bank.setTicket = await this.ticketRecuperatorService.recuperatorTicketById(
+      bankBD.current_ticket_turn
+    );
+    return bank;
+  }
 
   async retrieveBankByTicket(ticket: string): Promise<Bank> {
     const bankBD = await this.CacUPBRepository.findBankByIdTicket(ticket);

@@ -24,6 +24,7 @@ export default class CreateTicketView extends Observer {
         const div = document.createElement('div');
         div.className = 'ticket';
         div.innerHTML = await CreateTicketTemplate.render();
+        document.querySelector('.navigate-app').innerHTML = '';
         this.selector.appendChild(div);
         // console.log(this.selector);
     }

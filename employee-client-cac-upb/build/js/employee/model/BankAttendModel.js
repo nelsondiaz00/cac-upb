@@ -46,6 +46,7 @@ export default class BankAttendModel extends Subject {
         }
     }
     async finishTurn(notes) {
+        notes = notes + '(CITA ATENDIDA)';
         this.actualTicket.getAppointment().setNotes(notes);
         try {
             const info = {
@@ -109,6 +110,29 @@ export default class BankAttendModel extends Subject {
         catch (e) {
             console.log(e);
             return false;
+        }
+    }
+    async getBank() {
+        try {
+            const employeeData = localStorage.getItem('employee');
+            const parsedUser = employeeData ? JSON.parse(employeeData) : null;
+            //  console.log(parsedUser.identification);
+            const responseBank = await fetch(await Environment.getBank(parsedUser.identification), {
+                method: 'GET',
+            });
+            if (!responseBank.ok) {
+                console.log('Error getting bank');
+                return 'desconocido';
+            }
+            else {
+                const bankData = await responseBank.json();
+                console.log(bankData, ' banco!');
+                return bankData.name;
+            }
+        }
+        catch (e) {
+            console.log(e);
+            return 'desconocido';
         }
     }
     async updateBank() {

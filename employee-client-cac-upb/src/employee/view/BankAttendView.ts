@@ -1,13 +1,7 @@
-// import UtilAppointment from '../../admin/shared/util/UtilTicket.js';
-// import Employee from '../../shared/types/Employee.js';
-// import { RoleEmployee } from '../../shared/types/RoleEmployee.js';
 import BankAttendModel from '../model/BankAttendModel.js';
 import BankAttendTemplate from '../template/BankAttendTemplate.js';
 import Observer from '../../shared/types/Observer.js';
-// import BootstrapTemplateToasts from '../../admin/shared/template/BootstrapTemplateToats.js';
 import UtilBoostrap from '../../admin/shared/util/UtilBootstrap.js';
-
-// import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class BankAttendView extends Observer<BankAttendModel> {
   private selector: HTMLDivElement;
@@ -18,19 +12,22 @@ export default class BankAttendView extends Observer<BankAttendModel> {
     this.selector = document.createElement('div');
   }
 
-  public init(): void {
+  public async init(): Promise<void> {
     this.selector = document.querySelector(this.selectorName) as HTMLDivElement;
     this.addListeners();
+    const bank = await (this.subject as BankAttendModel).getBank();
+    localStorage.setItem('bank', JSON.stringify(bank));
   }
 
-  public override update(): void {
-    this.render();
+  public override async update(): Promise<void> {
+    await this.render();
   }
 
   public async render(): Promise<void> {
     this.selector.innerHTML = '';
     const div = document.createElement('div');
     div.className = 'appointment';
+    // const bank = await (this.subject as BankAttendModel).getBank();
     div.innerHTML = await BankAttendTemplate.render();
     this.selector.appendChild(div);
     this.addHTMLTicketNotifier(

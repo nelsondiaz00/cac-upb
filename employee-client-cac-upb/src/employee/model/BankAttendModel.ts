@@ -17,6 +17,7 @@ export default class BankAttendModel extends Subject<BankAttendView> {
 
   public init = async (): Promise<void> => {
     // console.log('appointment model init');
+
     this.startTicketUpdate();
     this.notifyAllObservers();
   };
@@ -55,6 +56,7 @@ export default class BankAttendModel extends Subject<BankAttendView> {
   }
 
   public async finishTurn(notes: string): Promise<boolean> {
+    notes = notes + '(CITA ATENDIDA)';
     this.actualTicket.getAppointment().setNotes(notes);
     try {
       const info = {
@@ -117,6 +119,32 @@ export default class BankAttendModel extends Subject<BankAttendView> {
     } catch (e) {
       console.log(e);
       return false;
+    }
+  }
+
+  public async getBank(): Promise<string> {
+    try {
+      const employeeData = localStorage.getItem('employee');
+      const parsedUser = employeeData ? JSON.parse(employeeData) : null;
+      //  console.log(parsedUser.identification);
+      const responseBank = await fetch(
+        await Environment.getBank(parsedUser.identification),
+        {
+          method: 'GET',
+        }
+      );
+
+      if (!responseBank.ok) {
+        console.log('Error getting bank');
+        return 'desconocido';
+      } else {
+        const bankData = await responseBank.json();
+        console.log(bankData, ' banco!');
+        return bankData.name;
+      }
+    } catch (e) {
+      console.log(e);
+      return 'desconocido';
     }
   }
 

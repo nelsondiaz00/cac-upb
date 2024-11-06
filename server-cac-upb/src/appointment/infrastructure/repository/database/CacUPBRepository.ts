@@ -12,6 +12,51 @@ export default class CacUPBRepository implements ICacUPBRepository {
   constructor() {
     this.CacUPBDB = new CacUPBDB();
   }
+  async findBankByIdEmployee(identification: string): Promise<IBankData> {
+    try {
+      console.log(identification);
+      return await this.CacUPBDB.getBankByEmployeeId(identification);
+    } catch (error) {
+      console.log(error);
+      return {
+        id: '',
+        employee_id: '',
+        current_ticket_turn: '',
+        name: '',
+        address: '',
+      };
+    }
+  }
+  async findEmployeeById(id: string): Promise<IEmployeeData> {
+    try {
+      const employeeData = await this.CacUPBDB.getEmployeeById(id);
+      // console.log(id);
+      return {
+        id: employeeData.id,
+        name: employeeData.name,
+        lastname: employeeData.lastname,
+        identification: employeeData.identification,
+        birthday: employeeData.birthdate,
+        address: employeeData.address,
+        email: employeeData.email,
+        password: employeeData.password,
+        role: employeeData.role,
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        id: '',
+        name: '',
+        lastname: '',
+        identification: '',
+        birthday: '',
+        address: '',
+        email: '',
+        password: '',
+        role: '',
+      };
+    }
+  }
 
   async findBankByIdTicket(turn: string): Promise<IBankData> {
     try {
@@ -88,9 +133,10 @@ export default class CacUPBRepository implements ICacUPBRepository {
       };
     }
   }
-  async findEmployeeById(id: string): Promise<IEmployeeData> {
+  async findEmployeeByIdentification(id: string): Promise<IEmployeeData> {
     try {
-      const employeeData = await this.CacUPBDB.getAppointmentById(id);
+      const employeeData = await this.CacUPBDB.getEmployeeByIdentification(id);
+      // console.log(id);
       return {
         id: employeeData.id,
         name: employeeData.name,

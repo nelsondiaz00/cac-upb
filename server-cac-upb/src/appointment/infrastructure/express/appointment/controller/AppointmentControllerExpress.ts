@@ -12,10 +12,10 @@ export default class AppointmentControllerExpress
       const result = await this.appointmentUseCase.createAppointment(
         appointmentData
       );
-      if (result) {
-        res.status(201).json({ message: result });
-      } else {
+      if (result === 'error') {
         res.status(400).json({ message: 'Appointment could not be created' });
+      } else {
+        res.status(201).json({ message: result });
       }
     } catch (e) {
       console.log(e);

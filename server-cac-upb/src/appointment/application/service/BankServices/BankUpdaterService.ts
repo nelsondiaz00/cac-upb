@@ -7,6 +7,9 @@ export default class BankUpdaterService implements IBankUpdaterService {
     idTicket: string,
     identificationEmployee: string
   ): Promise<boolean> {
+    console.log('BankUpdaterService');
+    console.log('idTicket: ', idTicket);
+    console.log('identificationEmployee: ', identificationEmployee);
     return await this.CacUPBRepository.updateBank(
       idTicket,
       identificationEmployee

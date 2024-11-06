@@ -21,10 +21,12 @@ export default interface IRepository<T, E, F, G, H, I> {
   // employees
   findEmployees(): Promise<H[]>;
   findEmployeeByEmail(email: string): Promise<H>;
+  findEmployeeByIdentification(id: string): Promise<H>;
   findEmployeeById(id: string): Promise<H>;
   saveEmployee(employee: H): Promise<boolean>;
 
   // bank
   findBankByIdTicket(turn: string): Promise<I>;
   updateBank(turn: string, identificationEmployee: string): Promise<boolean>;
+  findBankByIdEmployee(identification: string): Promise<I>;
 }

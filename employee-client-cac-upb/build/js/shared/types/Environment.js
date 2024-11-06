@@ -41,6 +41,12 @@ export default class Environment {
         const endpoint = json['bank/update'];
         return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}`;
     };
+    static getBank = async (identification) => {
+        const env = await fetch('./js/env/env.json');
+        const json = await env.json();
+        const endpoint = json['bank/:id'];
+        return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}/${identification}`;
+    };
     static nextTicket = async () => {
         const env = await fetch('./js/env/env.json');
         const json = await env.json();

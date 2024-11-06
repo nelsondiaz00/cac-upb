@@ -54,6 +54,15 @@ export default class Environment {
     return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}`;
   };
 
+  public static readonly getBank = async (
+    identification: string
+  ): Promise<string> => {
+    const env = await fetch('./js/env/env.json');
+    const json = await env.json();
+    const endpoint = json['bank/:id'] as EndPoint;
+    return `${endpoint.protocol}://${endpoint.domain}/${endpoint.path}/${endpoint.version}/${endpoint.resource}/${identification}`;
+  };
+
   public static readonly nextTicket = async (): Promise<string> => {
     const env = await fetch('./js/env/env.json');
     const json = await env.json();

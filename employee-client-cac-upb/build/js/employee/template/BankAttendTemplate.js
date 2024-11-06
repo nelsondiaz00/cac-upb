@@ -13,9 +13,11 @@ export default class BankAttendTemplate {
         `;
     }
     static async render() {
+        const bankData = localStorage.getItem('bank');
+        const bank = bankData ? JSON.parse(bankData) : null;
         return `
     <div class="name-module">
-      <h3>Atender citas</h3>
+      <h3>Atender citas desde banco ${bank ? bank : 'desconocido'}</h3>
     </div>
     <div class="container-attend">
     </div>

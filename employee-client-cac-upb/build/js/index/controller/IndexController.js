@@ -1,25 +1,29 @@
+// import CreateTicketController from '../../ticket/create-ticket/controller/CreateTicketController.js';
+// import CreateTicket from '../../ticket/create-ticket/CreateTicket.js';
+import AppointmentMasterDetail from '../../admin/appointments-master-detail/AppointmentsMasterDetail.js';
 import CreateEmployee from '../../admin/create-employee/CreateEmployee.js';
 import Login from '../../admin/login-employee/login.js';
-import ShowAppointment from '../../admin/show-appointment/ShowAppointment.js';
 import ShowCancelAppointment from '../../admin/show-cancel-appointment/ShowCancelAppointment.js';
 import BankAttend from '../../employee/BankAttend.js';
 // import IndexView from '../view/IndexView.js'
 export default class IndexController {
     indexModel;
     indexView;
-    showAppointment;
+    // private readonly showAppointment: ShowAppointmentController;
     showAppointmentCanceled;
     createEmployee;
     bankAttend;
     login;
+    appointmentMasterDetail;
     constructor(indexModel, indexView) {
         this.indexModel = indexModel;
         this.indexView = indexView;
-        this.showAppointment = ShowAppointment.create();
+        // this.showAppointment = ShowAppointment.create();
         this.showAppointmentCanceled = ShowCancelAppointment.create();
         this.createEmployee = CreateEmployee.create();
         this.login = Login.create();
         this.bankAttend = BankAttend.create();
+        this.appointmentMasterDetail = AppointmentMasterDetail.create();
     }
     init = async () => {
         this.indexModel.init();
@@ -50,7 +54,8 @@ export default class IndexController {
         }
     };
     loadAppointments = async () => {
-        this.showAppointment.init();
+        // this.showAppointment.init();
+        this.appointmentMasterDetail.init();
     };
     loadAppointmentsCanceled = async () => {
         this.showAppointmentCanceled.init();

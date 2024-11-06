@@ -31,6 +31,20 @@ export default class CacUPBDB {
     return rows[0];
   }
 
+  public async getBankByEmployeeId(
+    employeeIdentification: string
+  ): Promise<any> {
+    console.log(employeeIdentification);
+    const employeeDb = await this.getEmployeeByIdentification(
+      employeeIdentification
+    );
+    const [rows]: any = await this.connection.execute(
+      'SELECT * FROM Bank WHERE employee_id = ?',
+      [employeeDb.id]
+    );
+    return rows[0];
+  }
+
   public async updateBank(
     turn: string,
     identificationEmployee: string
@@ -60,6 +74,14 @@ export default class CacUPBDB {
   public async getEmployeeByIdentification(id: string): Promise<any> {
     const [rows]: any = await this.connection.execute(
       'SELECT * FROM Employee WHERE identification = ?',
+      [id]
+    );
+    return rows[0];
+  }
+
+  public async getEmployeeById(id: string): Promise<any> {
+    const [rows]: any = await this.connection.execute(
+      'SELECT * FROM Employee WHERE id = ?',
       [id]
     );
     return rows[0];
@@ -163,12 +185,36 @@ export default class CacUPBDB {
       const [queueTickets]: any = await this.connection.execute(
         queryQueueTicket
       );
+
+      setInterval(this.deleteExpiredAppointments, 1000);
       return queueTickets;
     } catch (e) {
       console.log(e);
       return [];
     }
   }
+
+  private deleteExpiredAppointments = async () => {
+    try {
+      const queryGetExpiredAppointments = `
+        SELECT id FROM Appointment WHERE date <= NOW();
+      `;
+      const [expiredAppointments] = await this.connection.execute(
+        queryGetExpiredAppointments
+      );
+
+      for (const appointment of Array.from(expiredAppointments as any[])) {
+        const appointmentId = appointment.id;
+
+        const isDeleted = await this.deleteAppointment(appointmentId);
+        if (!isDeleted) {
+          console.warn(`No se pudo eliminar la cita con ID ${appointmentId}.`);
+        }
+      }
+    } catch (e) {
+      console.error('Error al eliminar citas vencidas:', e);
+    }
+  };
 
   public getClientByIdentification = async (identification: string) => {
     const [clientRows]: any = await this.connection.execute(
@@ -245,18 +291,14 @@ export default class CacUPBDB {
 
   public deleteAppointment = async (id: string): Promise<boolean> => {
     try {
+      this.updateAppointmentNote(id, 'CITA CANCELADA');
       const queryDeleteAppointment = `
       DELETE FROM Appointment WHERE id = ?;
     `;
       console.log(id);
       await this.connection.beginTransaction();
 
-      const appointmentDeleted = await this.createDeletedAppointment(id);
-
-      if (!appointmentDeleted) {
-        await this.connection.rollback();
-        return false;
-      }
+      await this.createDeletedAppointment(id);
 
       await this.connection.execute(queryDeleteAppointment, [id]);
 
@@ -267,6 +309,22 @@ export default class CacUPBDB {
       await this.connection.rollback();
       return false;
     }
+  };
+
+  public updateAppointmentNote = async (
+    id: string,
+    notes: string
+  ): Promise<boolean> => {
+    const queryUpdateAppointment = `
+      UPDATE Appointment 
+      SET notes = ?
+      WHERE id = ?;
+    `;
+
+    // const clientId = await this.getIdClient(appointment.client_identification);
+    await this.connection.execute(queryUpdateAppointment, [notes, id]);
+
+    return true;
   };
 
   public updateAppointment = async (
@@ -316,8 +374,7 @@ export default class CacUPBDB {
     `;
       console.log(id);
       const appointment = await this.getAppointmentById(id);
-      // const appointment = appointments[0];
-      // console.log(appointment);
+
       await this.connection.execute(queryInsertDeletedAppointment, [
         appointment.id,
         appointment.client_id,

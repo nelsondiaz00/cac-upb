@@ -9,6 +9,13 @@ export default class BankUseCase implements IBankUseCase {
     private readonly bankUpdaterService: IBankUpdaterService
   ) {}
 
+  getBankByEmployeeIdentificacion(
+    employeeIdentification: string
+  ): Promise<Bank> {
+    return this.bankRecuperatorService.retrieveBankByEmployeeIdentification(
+      employeeIdentification
+    );
+  }
   async getBankByTicket(ticket: string): Promise<Bank> {
     return await this.bankRecuperatorService.retrieveBankByTicket(ticket);
   }

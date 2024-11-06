@@ -30,6 +30,7 @@ export default class CreateTicketView extends Observer<CreateTicketModel> {
     const div = document.createElement('div');
     div.className = 'ticket';
     div.innerHTML = await CreateTicketTemplate.render();
+    (document.querySelector('.navigate-app') as HTMLElement).innerHTML = '';
     this.selector.appendChild(div);
     // console.log(this.selector);
   }

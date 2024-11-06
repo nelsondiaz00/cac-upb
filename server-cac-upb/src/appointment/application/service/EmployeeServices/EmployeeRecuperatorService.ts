@@ -21,6 +21,21 @@ export default class EmployeeRecuperatorService
       RoleEmployeeProvider.get(employee.role)
     );
   }
+  async retrieveEmployeeByIdentification(id: string): Promise<Employee> {
+    const employee = await this.CacUPBRepository.findEmployeeByIdentification(
+      id
+    );
+    return new Employee(
+      employee.identification,
+      employee.name,
+      employee.lastname,
+      getDate(employee.birthday),
+      employee.address,
+      employee.email,
+      employee.password,
+      RoleEmployeeProvider.get(employee.role)
+    );
+  }
 
   async retrieveAllEmployees(): Promise<Employee[]> {
     const employeeBD = await this.CacUPBRepository.findEmployees();

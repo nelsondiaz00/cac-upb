@@ -16,9 +16,6 @@ export default class HeaderTemplate {
                   <a class="dropdown-item" href="/employee/appointments">Ver citas</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="/employee/appointments-canceled">Ver citas canceladas</a>
-                </li>
-                <li>
                   <a class="dropdown-item" href="/employee/create">Crear usuarios</a>
                 </li>
                 <li><hr class="dropdown-divider"></li>

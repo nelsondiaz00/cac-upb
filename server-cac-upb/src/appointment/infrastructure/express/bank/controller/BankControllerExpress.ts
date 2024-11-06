@@ -4,6 +4,33 @@ import IBankUseCase from '../../../../domain/port/driver/bank/IBankUseCase';
 
 export default class BankControllerExpress implements IBankControllerExpress {
   constructor(private readonly bankUseCase: IBankUseCase) {}
+  async readBankByEmployeeIdentificacion(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    try {
+      const { idEmployee } = req.params;
+      if (!idEmployee) {
+        res.status(404).json({ message: 'Bad identification' });
+        return;
+      }
+      const bank = await this.bankUseCase.getBankByEmployeeIdentificacion(
+        idEmployee
+      );
+      if (bank) {
+        if (bank.isNull()) {
+          res.status(404).json({ message: 'Bank not found' });
+          return;
+        }
+        res.status(200).json(bank);
+      } else {
+        res.status(404).json({ message: 'Bank not found' });
+      }
+    } catch (e) {
+      res.status(500).json({ message: 'Internal Server Error' });
+      console.log(e);
+    }
+  }
   async readBankByTicket(req: Request, res: Response): Promise<void> {
     try {
       const { idTicket } = req.params;

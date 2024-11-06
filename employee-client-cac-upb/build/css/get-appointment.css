@@ -1,3 +1,9 @@
+body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
 .main-container {
   display: flex;
   flex-direction: row;
@@ -83,4 +89,37 @@ header {
 .container-attend h3 {
   margin-right: 2%;
   margin-bottom: 0%;
+}
+
+#prods label {
+  color: black;
+}
+
+.table-responsive {
+  max-height: 300px;
+  min-height: 300px;
+  margin: auto;
+}
+
+.table {
+  width: 100%;
+  table-layout: fixed; /* Hace que las columnas tengan un tamaño fijo */
+}
+
+.table th,
+.table td {
+  overflow: hidden; /* Oculta cualquier contenido que se desborde por defecto */
+}
+
+.table td {
+  max-width: 200px; /* Ajusta el ancho de las celdas según tus necesidades */
+}
+
+.table td div {
+  max-height: 120px; /* Altura máxima de la celda */
+  overflow-y: auto; /* Activa el scroll vertical si el contenido excede la altura */
+  white-space: normal; /* Permite el salto de línea */
+  word-wrap: break-word; /* Rompe palabras largas */
+  display: block; /* Asegura que el div se comporte como un bloque */
+  height: 100%; /* Ocupa toda la altura de la celda */
 }
